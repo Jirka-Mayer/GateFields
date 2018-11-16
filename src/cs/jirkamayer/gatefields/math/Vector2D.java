@@ -11,11 +11,19 @@ public class Vector2D {
         this.y = y;
     }
 
+    public Vector2D plus(Vector2D v) {
+        return new Vector2D(this.x + v.x, this.y + v.y);
+    }
+
     public Vector2D minus(Vector2D v) {
         return new Vector2D(this.x - v.x, this.y - v.y);
     }
 
     public Vector2D times(float scalar) {
         return new Vector2D(this.x * scalar, this.y * scalar);
+    }
+
+    public Vector2D divide(float scalar) {
+        return new Vector2D(this.x / scalar, this.y / scalar);
     }
 }
