@@ -26,4 +26,41 @@ public class Vector2D {
     public Vector2D divide(float scalar) {
         return new Vector2D(this.x / scalar, this.y / scalar);
     }
+
+    public Vector2D rotate(double angle) {
+        float sina = (float)Math.sin(angle);
+        float cosa = (float)Math.cos(angle);
+        return new Vector2D(
+            x * cosa - y * sina,
+            x * sina + y * cosa
+        );
+    }
+
+    public Vector2D round() {
+        return new Vector2D(
+            Math.round(x),
+            Math.round(y)
+        );
+    }
+
+    public float length() {
+        return (float)Math.sqrt(x*x + y*y);
+    }
+
+    public boolean equals(Vector2D v) {
+        return this.x == v.x && this.y == v.y;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Vector2D) {
+            return this.equals((Vector2D)obj);
+        }
+        return super.equals(obj);
+    }
+
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ")";
+    }
 }
