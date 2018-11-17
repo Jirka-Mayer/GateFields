@@ -2,8 +2,7 @@ package cs.jirkamayer.gatefields;
 
 import cs.jirkamayer.gatefields.math.Size2D;
 import cs.jirkamayer.gatefields.math.Vector2D;
-import cs.jirkamayer.gatefields.scheme.NotGate;
-import cs.jirkamayer.gatefields.scheme.Scheme;
+import cs.jirkamayer.gatefields.scheme.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +23,12 @@ class MainWindow extends JFrame {
         scheme = new Scheme();
 
         // fake scheme
-        scheme.add(new NotGate());
+        Element notGate = new NotGate();
+        Vertex freeVertex = new Vertex(new Vector2D(5, 5));
+        Wire wire = new Wire(notGate.vertices.get(1), freeVertex);
+        scheme.add(notGate);
+        scheme.add(freeVertex);
+        scheme.add(wire);
 
         sceneView = new SchemeView(scheme);
         sceneView.setSize(400, 400);

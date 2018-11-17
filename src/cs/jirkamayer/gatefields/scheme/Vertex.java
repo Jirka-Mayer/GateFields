@@ -8,7 +8,7 @@ import cs.jirkamayer.gatefields.math.Vector2D;
 import java.awt.*;
 
 public class Vertex {
-    private Transform transform;
+    public Transform transform;
     private Element boundElement;
 
     public Vertex(Vector2D position, Element boundElement) {
@@ -18,6 +18,10 @@ public class Vertex {
         this.boundElement = boundElement;
         if (boundElement != null)
             transform.setParent(boundElement.transform);
+    }
+
+    public Vertex(Vector2D position) {
+        this(position, null);
     }
 
     public boolean isBound() {
