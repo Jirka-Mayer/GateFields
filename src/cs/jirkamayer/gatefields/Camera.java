@@ -1,6 +1,7 @@
 package cs.jirkamayer.gatefields;
 
 import cs.jirkamayer.gatefields.math.Size2D;
+import cs.jirkamayer.gatefields.math.Transform;
 import cs.jirkamayer.gatefields.math.Vector2D;
 
 import java.awt.*;
@@ -22,6 +23,11 @@ public class Camera {
     private int displayWidth = 100;
     private int displayHeight = 100;
 
+    /**
+     * Transform in which we are rendering
+     */
+    private Transform transform = null;
+
     public void setGraphics(Graphics g) {
         this.g = (Graphics2D)g;
     }
@@ -31,8 +37,18 @@ public class Camera {
         displayWidth = width;
     }
 
+    public void setTransform(Transform t) {
+        transform = t;
+    }
+
+    /////////////////////
+    // Transformations //
+    /////////////////////
+
     public Vector2D worldToScreen(Vector2D v) {
-        return v.minus(position).times(scale);
+        return v.minus(position)
+            .times(scale)
+            .plus(new Vector2D(displayWidth / 2f, displayHeight / 2f));
     }
 
     public Size2D worldToScreen(Size2D sz) {
@@ -43,14 +59,35 @@ public class Camera {
         return sz * scale;
     }
 
+    public Vector2D localToScreen(Vector2D v) {
+        if (transform != null)
+            v = transform.transformLocalToGlobal(v);
+
+        return this.worldToScreen(v);
+    }
+
+    public Size2D localToScreen(Size2D sz) {
+        // scale is not affected by transforms
+        return this.worldToScreen(sz);
+    }
+
+    public float localToScreen(float sz) {
+        // scale is not affected by transforms
+        return this.worldToScreen(sz);
+    }
+
+    /////////////
+    // Drawing //
+    /////////////
+
     public void clear(Color color) {
         g.setColor(color);
         g.fillRect(0, 0, displayWidth, displayHeight);
     }
 
     public void fillRect(Vector2D pos, Size2D sz, Color color) {
-        pos = this.worldToScreen(pos);
-        sz = this.worldToScreen(sz);
+        pos = this.localToScreen(pos);
+        sz = this.localToScreen(sz);
 
         g.setColor(color);
 
@@ -58,9 +95,9 @@ public class Camera {
     }
 
     public void drawLine(Vector2D a, Vector2D b, float width, Color color) {
-        a = this.worldToScreen(a);
-        b = this.worldToScreen(b);
-        width = this.worldToScreen(width);
+        a = this.localToScreen(a);
+        b = this.localToScreen(b);
+        width = this.localToScreen(width);
 
         g.setStroke(new BasicStroke(width));
         g.setColor(color);

@@ -7,9 +7,17 @@ import cs.jirkamayer.gatefields.math.Vector2D;
 import java.awt.*;
 
 public class NotGate extends Element {
+    public NotGate() {
+        vertices.add(new Vertex(new Vector2D(-1, 0), this));
+        vertices.add(new Vertex(new Vector2D(2, 0), this));
+    }
+
     public void draw(Camera c) {
+        c.setTransform(transform);
+
+        // origin
         c.fillRect(
-            this.position.minus(new Vector2D(0.1f, 0.1f)),
+            new Vector2D(-0.1f, -0.1f),
             new Size2D(0.2f, 0.2f),
             Color.ORANGE
         );

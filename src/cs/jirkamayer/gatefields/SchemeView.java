@@ -3,6 +3,7 @@ package cs.jirkamayer.gatefields;
 import cs.jirkamayer.gatefields.math.Size2D;
 import cs.jirkamayer.gatefields.math.Vector2D;
 import cs.jirkamayer.gatefields.scheme.NotGate;
+import cs.jirkamayer.gatefields.scheme.Scheme;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -10,12 +11,16 @@ import java.awt.event.*;
 public class SchemeView extends Canvas {
     private Camera camera;
 
+    private Scheme scheme;
+
     private Vector2D cameraOnDown = null;
     private Vector2D mouseDown = null;
     private boolean mousePressed = false;
 
-    public SchemeView() {
+    public SchemeView(Scheme scheme) {
         super();
+
+        this.scheme = scheme;
 
         this.camera = new Camera();
 
@@ -30,8 +35,9 @@ public class SchemeView extends Canvas {
 
         camera.clear(Color.BLACK);
 
-        camera.fillRect(new Vector2D(1f, 1f), new Size2D(1.0f, 0.5f), Color.RED);
+        scheme.draw(camera);
 
+        /*
         g.setColor(Color.BLACK);
         g.fillOval(
             100,
@@ -39,8 +45,7 @@ public class SchemeView extends Canvas {
             50,
             50
         );
-
-        new NotGate().draw(camera);
+        */
     }
 
     private class SchemeViewMouseMotionListener implements MouseMotionListener {
@@ -91,10 +96,10 @@ public class SchemeView extends Canvas {
         @Override
         public void mouseWheelMoved(MouseWheelEvent e) {
             if (e.getWheelRotation() > 0) {
-                camera.scale *= 0.95f;
+                camera.scale *= 0.9f;
                 SchemeView.this.repaint();
             } else if (e.getWheelRotation() < 0) {
-                camera.scale /= 0.95f;
+                camera.scale /= 0.9f;
                 SchemeView.this.repaint();
             }
         }

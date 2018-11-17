@@ -1,10 +1,14 @@
 package cs.jirkamayer.gatefields.scheme;
 
 import cs.jirkamayer.gatefields.Camera;
-import cs.jirkamayer.gatefields.math.Vector2D;
+import cs.jirkamayer.gatefields.math.Transform;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Element {
-    public Vector2D position = Vector2D.ZERO;
+    public Transform transform = new Transform();
+    public List<Vertex> vertices = new ArrayList<>();
 
     public abstract void draw(Camera c);
 }

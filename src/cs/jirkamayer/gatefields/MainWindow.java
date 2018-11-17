@@ -3,6 +3,7 @@ package cs.jirkamayer.gatefields;
 import cs.jirkamayer.gatefields.math.Size2D;
 import cs.jirkamayer.gatefields.math.Vector2D;
 import cs.jirkamayer.gatefields.scheme.NotGate;
+import cs.jirkamayer.gatefields.scheme.Scheme;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,10 +16,17 @@ class MainWindow extends JFrame {
 
     private SchemeView sceneView;
 
+    private Scheme scheme;
+
     MainWindow() {
         super("Gate fields");
 
-        sceneView = new SchemeView();
+        scheme = new Scheme();
+
+        // fake scheme
+        scheme.add(new NotGate());
+
+        sceneView = new SchemeView(scheme);
         sceneView.setSize(400, 400);
         this.add(sceneView);
 
