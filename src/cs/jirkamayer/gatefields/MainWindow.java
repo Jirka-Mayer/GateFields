@@ -33,10 +33,7 @@ class MainWindow extends JFrame {
         scheme.add(freeVertex);
         scheme.add(wire);
 
-        // fake selection
-        selection.select(freeVertex);
-
-        sceneView = new SchemeView(scheme);
+        sceneView = new SchemeView(scheme, selection);
         sceneView.setSize(1200, 700);
         this.add(sceneView);
 

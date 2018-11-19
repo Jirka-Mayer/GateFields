@@ -10,6 +10,21 @@ public class Selection {
     private List<Vertex> vertices = new ArrayList<>();
     private List<Element> elements = new ArrayList<>();
 
+    private List<SelectionChangeListener> changeListeners = new ArrayList<>();
+
+    public interface SelectionChangeListener {
+        void selectionChanged();
+    }
+
+    public void addOnChangeListener(SelectionChangeListener listener) {
+        changeListeners.add(listener);
+    }
+
+    private void broadcastChange() {
+        for (SelectionChangeListener listener : changeListeners)
+            listener.selectionChanged();
+    }
+
     public void select(Vertex v) {
         if (v.selected)
             return;
@@ -19,6 +34,8 @@ public class Selection {
 
         if (v.isBound())
             this.selectJustElement(v.getBoundElement());
+
+        this.broadcastChange();
     }
 
     public void deselect(Vertex v) {
@@ -30,6 +47,21 @@ public class Selection {
 
         if (v.isBound())
             this.checkElementSelection(v.getBoundElement());
+
+        this.broadcastChange();
+    }
+
+    public void deselectAll() {
+        for (Element e : elements)
+            e.selected = false;
+
+        for (Vertex v : vertices)
+            v.selected = false;
+
+        elements.clear();
+        vertices.clear();
+
+        this.broadcastChange();
     }
 
     private void selectJustElement(Element e) {

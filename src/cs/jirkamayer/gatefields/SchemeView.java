@@ -1,9 +1,10 @@
 package cs.jirkamayer.gatefields;
 
+import cs.jirkamayer.gatefields.editor.Selection;
+import cs.jirkamayer.gatefields.editor.actions.ActionController;
+import cs.jirkamayer.gatefields.editor.actions.ClickSelectionAction;
 import cs.jirkamayer.gatefields.editor.events.EventDispatcher;
-import cs.jirkamayer.gatefields.math.Size2D;
 import cs.jirkamayer.gatefields.math.Vector2D;
-import cs.jirkamayer.gatefields.scheme.NotGate;
 import cs.jirkamayer.gatefields.scheme.Scheme;
 
 import java.awt.*;
@@ -12,32 +13,43 @@ import java.awt.event.*;
 public class SchemeView extends Canvas {
     private Camera camera;
     private Scheme scheme;
+    private Selection selection;
     private EventDispatcher eventDispatcher;
+    private ActionController actionController;
 
     private Vector2D cameraOnDown = null;
     private Vector2D mouseDown = null;
     private boolean mousePressed = false;
 
-    public SchemeView(Scheme scheme) {
+    public SchemeView(Scheme scheme, Selection selection) {
         super();
 
         this.camera = new Camera();
         this.scheme = scheme;
+        this.selection = selection;
         this.eventDispatcher = new EventDispatcher();
+        this.actionController = new ActionController(eventDispatcher);
 
-        /*eventDispatcher.addEventListener((e) -> {
-            for (boolean b : e.mouseState.buttonPressed)
-                System.out.print(b + ", ");
-            System.out.println();
-        });*/
+        this.registerAllActions();
 
+        // TODO: remove this
         this.addMouseListener(new SchemeViewMouseListener());
         this.addMouseMotionListener(new SchemeViewMouseMotionListener());
         this.addMouseWheelListener(new SchemeViewMouseWheelListener());
 
+        // register event handling
         this.addMouseListener(eventDispatcher);
-        /*this.addMouseMotionListener(eventDispatcher);
-        this.addMouseWheelListener(eventDispatcher);*/
+        this.addMouseMotionListener(eventDispatcher);
+        this.addMouseWheelListener(eventDispatcher);
+        this.addKeyListener(eventDispatcher);
+
+        // register repainting events
+        selection.addOnChangeListener(this::repaint);
+    }
+
+    private void registerAllActions()
+    {
+        actionController.registerAction(new ClickSelectionAction(camera, scheme, selection));
     }
 
     public void paint(Graphics g) {

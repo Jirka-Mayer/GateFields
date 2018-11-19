@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Scheme {
-    private List<Vertex> vertices = new ArrayList<>();
-    private List<Element> elements = new ArrayList<>();
-    private List<Wire> wires = new ArrayList<>();
+    public List<Vertex> vertices = new ArrayList<>();
+    public List<Element> elements = new ArrayList<>();
+    public List<Wire> wires = new ArrayList<>();
 
     public void add(Element e) {
         this.elements.add(e);

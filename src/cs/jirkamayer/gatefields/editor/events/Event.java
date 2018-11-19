@@ -9,7 +9,8 @@ public class Event {
      */
 
     private EventType eventType;
-    public MouseState mouseState = new MouseState();
+    public MouseState mouseState = null;
+    public KeyState keyState = null;
 
     public Event(EventType eventType) {
         this.eventType = eventType;

@@ -1,13 +1,20 @@
 package cs.jirkamayer.gatefields.editor.events;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import cs.jirkamayer.gatefields.math.Vector2D;
+
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventDispatcher implements MouseListener {
+public class EventDispatcher implements
+    MouseListener,
+    MouseMotionListener,
+    MouseWheelListener,
+    KeyListener
+{
 
     private MouseState mouseState = new MouseState();
+    private KeyState keyState = new KeyState();
 
     private List<EventListener> listeners = new ArrayList<>();
 
@@ -21,6 +28,7 @@ public class EventDispatcher implements MouseListener {
 
     private void dispatch(Event e) {
         e.mouseState = mouseState;
+        e.keyState = keyState;
 
         for (EventListener l : listeners)
             l.eventOccurred(e);
@@ -37,6 +45,7 @@ public class EventDispatcher implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        mouseState.position = new Vector2D(e.getX(), e.getY());
         mouseState.buttonPressed[e.getButton()] = true;
 
         this.dispatch(new Event(EventType.MOUSE_DOWN));
@@ -44,6 +53,7 @@ public class EventDispatcher implements MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        mouseState.position = new Vector2D(e.getX(), e.getY());
         mouseState.buttonPressed[e.getButton()] = false;
 
         this.dispatch(new Event(EventType.MOUSE_UP));
@@ -57,5 +67,51 @@ public class EventDispatcher implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    /////////////////////////
+    // MouseMotionListener //
+    /////////////////////////
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
+    }
+
+    ////////////////////////
+    // MouseWheelListener //
+    ////////////////////////
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+
+    }
+
+    /////////////////
+    // KeyListener //
+    /////////////////
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // not interesting for us
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        keyState.buttonPressed[e.getKeyCode()] = true;
+
+        this.dispatch(new Event(EventType.KEY_DOWN));
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        keyState.buttonPressed[e.getKeyCode()] = false;
+
+        this.dispatch(new Event(EventType.KEY_UP));
     }
 }
