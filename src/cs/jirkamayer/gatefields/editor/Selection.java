@@ -1,5 +1,6 @@
 package cs.jirkamayer.gatefields.editor;
 
+import cs.jirkamayer.gatefields.math.Vector2D;
 import cs.jirkamayer.gatefields.scheme.Element;
 import cs.jirkamayer.gatefields.scheme.Vertex;
 
@@ -8,6 +9,7 @@ import java.util.List;
 
 public class Selection {
     private List<Vertex> vertices = new ArrayList<>();
+    private List<Vertex> freeVertices = new ArrayList<>();
     private List<Element> elements = new ArrayList<>();
 
     public void select(Vertex v) {
@@ -15,6 +17,8 @@ public class Selection {
             return;
 
         vertices.add(v);
+        if (!v.isBound())
+            freeVertices.add(v);
         v.selected = true;
 
         if (v.isBound())
@@ -26,6 +30,7 @@ public class Selection {
             return;
 
         vertices.remove(v);
+        freeVertices.remove(v);
         v.selected = false;
 
         if (v.isBound())
@@ -41,6 +46,7 @@ public class Selection {
 
         elements.clear();
         vertices.clear();
+        freeVertices.clear();
     }
 
     private void selectJustElement(Element e) {
@@ -68,5 +74,44 @@ public class Selection {
         }
 
         this.deselectJustElement(e);
+    }
+
+    ////////////////////////
+    // MoveAction helpers //
+    ////////////////////////
+    // (to keep the underlying fields encapsulated)
+
+    public Vector2D[] getFreeVertexPositions() {
+        Vector2D[] out = new Vector2D[freeVertices.size()];
+
+        for (int i = 0; i < out.length; i++)
+            out[i] = freeVertices.get(i).transform.getPosition();
+
+        return out;
+    }
+
+    public void setFreeVertexPositions(Vector2D[] pos, Vector2D delta) {
+        if (pos.length != freeVertices.size())
+            throw new IllegalArgumentException("Wrong array size.");
+
+        for (int i = 0; i < pos.length; i++)
+            freeVertices.get(i).transform.setPosition(pos[i].plus(delta));
+    }
+
+    public Vector2D[] getElementPositions() {
+        Vector2D[] out = new Vector2D[elements.size()];
+
+        for (int i = 0; i < out.length; i++)
+            out[i] = elements.get(i).transform.getPosition();
+
+        return out;
+    }
+
+    public void setElementPositions(Vector2D[] pos, Vector2D delta) {
+        if (pos.length != elements.size())
+            throw new IllegalArgumentException("Wrong array size.");
+
+        for (int i = 0; i < pos.length; i++)
+            elements.get(i).transform.setPosition(pos[i].plus(delta));
     }
 }

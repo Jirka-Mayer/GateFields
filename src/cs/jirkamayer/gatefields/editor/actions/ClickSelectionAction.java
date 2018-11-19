@@ -10,6 +10,8 @@ import cs.jirkamayer.gatefields.editor.events.MouseState;
 import cs.jirkamayer.gatefields.scheme.Scheme;
 import cs.jirkamayer.gatefields.scheme.Vertex;
 
+import java.util.List;
+
 public class ClickSelectionAction extends Action {
 
     /**
@@ -39,19 +41,21 @@ public class ClickSelectionAction extends Action {
     public void actionActivated(Event e) {
         super.actionActivated(e);
 
-        if (scheme.vertices.size() <= 0) {
+        List<Vertex> vertices = scheme.getVertices();
+
+        if (vertices.size() <= 0) {
             this.deactivate();
             return;
         }
 
         // get the closest vertex to mouse
-        Vertex closest = scheme.vertices.get(0);
+        Vertex closest = vertices.get(0);
         float closestDistance = camera
             .worldToScreen(closest.transform.getPosition())
             .minus(e.mouseState.position).length();
         float distance;
 
-        for (Vertex v : scheme.vertices) {
+        for (Vertex v : vertices) {
             distance = camera
                 .worldToScreen(v.transform.getPosition())
                 .minus(e.mouseState.position).length();

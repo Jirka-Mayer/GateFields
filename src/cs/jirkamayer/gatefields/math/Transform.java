@@ -58,6 +58,15 @@ public class Transform {
         this.rebuildCache();
     }
 
+    public void setPosition(Vector2D p) {
+        if (parent == null) {
+            position = p;
+        } else {
+            position = parent.transformGlobalToLocal(p);
+        }
+        this.rebuildCache();
+    }
+
     public void setLocalRotation(float r) {
         rotation = r;
         this.rebuildCache();
@@ -100,6 +109,13 @@ public class Transform {
             v = parent.transformLocalToGlobal(v);
 
         return v;
+    }
+
+    public Vector2D transformGlobalToLocal(Vector2D v) {
+        if (parent != null)
+            v = parent.transformGlobalToLocal(v);
+
+        return v.minus(position).rotate(-rotation);
     }
 
     public float transformLocalToGlobal(float angle) {

@@ -1,10 +1,7 @@
 package cs.jirkamayer.gatefields;
 
 import cs.jirkamayer.gatefields.editor.Selection;
-import cs.jirkamayer.gatefields.editor.actions.ActionController;
-import cs.jirkamayer.gatefields.editor.actions.ClickSelectionAction;
-import cs.jirkamayer.gatefields.editor.actions.MoveCameraAction;
-import cs.jirkamayer.gatefields.editor.actions.ZoomCameraAction;
+import cs.jirkamayer.gatefields.editor.actions.*;
 import cs.jirkamayer.gatefields.editor.events.EventDispatcher;
 import cs.jirkamayer.gatefields.scheme.Scheme;
 
@@ -40,6 +37,7 @@ public class SchemeView extends Canvas {
         actionController.registerAction(new MoveCameraAction(camera));
         actionController.registerAction(new ZoomCameraAction(camera));
         actionController.registerAction(new ClickSelectionAction(camera, scheme, selection));
+        actionController.registerAction(new MoveAction(camera, selection));
     }
 
     public void paint(Graphics g) {

@@ -1,6 +1,8 @@
 package cs.jirkamayer.gatefields.editor;
 
 import cs.jirkamayer.gatefields.editor.events.Event;
+import cs.jirkamayer.gatefields.editor.events.EventType;
+import cs.jirkamayer.gatefields.editor.events.KeyState;
 
 public abstract class Action {
 
@@ -41,15 +43,25 @@ public abstract class Action {
      * Handles all events when active
      */
     public void eventOccurred(Event e) {
-        // TODO: handle escape and enter, call "actionCanceled", "actionSubmitted"
+        if (e.getEventType() == EventType.KEY_DOWN) {
+            if (e.keyState.causeKey == KeyState.ENTER) {
+                this.actionSubmitted();
+            }
+
+            if (e.keyState.causeKey == KeyState.ESCAPE) {
+                this.actionCancelled();
+            }
+        }
     }
 
     public void actionCancelled() {
-
+        this.deactivate();
+        this.repaint();
     }
 
     public void actionSubmitted() {
-
+        this.deactivate();
+        this.repaint();
     }
 
     protected void repaint() {

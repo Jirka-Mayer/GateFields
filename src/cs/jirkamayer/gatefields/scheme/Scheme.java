@@ -3,18 +3,29 @@ package cs.jirkamayer.gatefields.scheme;
 import cs.jirkamayer.gatefields.Camera;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Scheme {
-    public List<Vertex> vertices = new ArrayList<>();
-    public List<Element> elements = new ArrayList<>();
-    public List<Wire> wires = new ArrayList<>();
+    private List<Vertex> vertices = new ArrayList<>();
+    private List<Element> elements = new ArrayList<>();
+    private List<Wire> wires = new ArrayList<>();
+
+    public List<Vertex> getVertices() {
+        return Collections.unmodifiableList(vertices);
+    }
+
+    public List<Element> getElements() {
+        return Collections.unmodifiableList(elements);
+    }
+
+    public List<Wire> getWires() {
+        return Collections.unmodifiableList(wires);
+    }
 
     public void add(Element e) {
         this.elements.add(e);
-
-        for (Vertex v : e.vertices)
-            vertices.add(v);
+        vertices.addAll(e.vertices);
     }
 
     public void add(Vertex v) {

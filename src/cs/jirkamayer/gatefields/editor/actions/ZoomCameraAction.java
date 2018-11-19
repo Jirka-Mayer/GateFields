@@ -33,7 +33,7 @@ public class ZoomCameraAction extends Action {
         }
 
         this.repaint();
-        
+
         this.deactivate();
     }
 }
