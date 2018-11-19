@@ -11,6 +11,8 @@ public class Vertex {
     public Transform transform;
     private Element boundElement;
 
+    public boolean selected;
+
     public Vertex(Vector2D position, Element boundElement) {
         transform = new Transform();
         transform.setLocalPosition(position);
@@ -28,13 +30,17 @@ public class Vertex {
         return boundElement != null;
     }
 
+    public Element getBoundElement() {
+        return this.boundElement;
+    }
+
     public void draw(Camera c) {
         c.setTransform(transform);
 
         c.fillRect(
             new Vector2D(-0.1f, -0.1f),
             new Size2D(0.2f, 0.2f),
-            Color.ORANGE
+            selected ? Color.RED : Color.ORANGE
         );
     }
 }

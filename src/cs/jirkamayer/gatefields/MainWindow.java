@@ -1,5 +1,6 @@
 package cs.jirkamayer.gatefields;
 
+import cs.jirkamayer.gatefields.editor.Selection;
 import cs.jirkamayer.gatefields.math.Size2D;
 import cs.jirkamayer.gatefields.math.Vector2D;
 import cs.jirkamayer.gatefields.scheme.*;
@@ -16,11 +17,13 @@ class MainWindow extends JFrame {
     private SchemeView sceneView;
 
     private Scheme scheme;
+    private Selection selection;
 
     MainWindow() {
         super("Gate fields");
 
         scheme = new Scheme();
+        selection = new Selection();
 
         // fake scheme
         Element notGate = new NotGate();
@@ -30,8 +33,11 @@ class MainWindow extends JFrame {
         scheme.add(freeVertex);
         scheme.add(wire);
 
+        // fake selection
+        selection.select(freeVertex);
+
         sceneView = new SchemeView(scheme);
-        sceneView.setSize(400, 400);
+        sceneView.setSize(1200, 700);
         this.add(sceneView);
 
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
