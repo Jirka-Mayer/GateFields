@@ -7,7 +7,7 @@ public class KeyState {
     public static final int ALT = 18;
     public static final int ESCAPE = 27;
 
-    public static final int E = 96;
+    public static final int E = 69;
     public static final int G = 71;
     public static final int X = 88;
 

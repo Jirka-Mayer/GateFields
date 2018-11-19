@@ -5,12 +5,17 @@ import cs.jirkamayer.gatefields.scheme.Element;
 import cs.jirkamayer.gatefields.scheme.Vertex;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Selection {
     private List<Vertex> vertices = new ArrayList<>();
     private List<Vertex> freeVertices = new ArrayList<>();
     private List<Element> elements = new ArrayList<>();
+
+    public List<Vertex> getVertices() {
+        return Collections.unmodifiableList(vertices);
+    }
 
     public void select(Vertex v) {
         if (v.selected)

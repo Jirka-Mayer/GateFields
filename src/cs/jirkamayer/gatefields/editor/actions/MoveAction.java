@@ -17,9 +17,15 @@ public class MoveAction extends Action {
     private Vector2D[] originalFreeVertexPositions = null;
     private Vector2D[] originalElementPositions = null;
 
+    private boolean result = false;
+
     public MoveAction(Camera camera, Selection selection) {
         this.camera = camera;
         this.selection = selection;
+    }
+
+    public boolean getResult() {
+        return result;
     }
 
     @Override
@@ -34,7 +40,12 @@ public class MoveAction extends Action {
     public void actionActivated(Event e) {
         super.actionActivated(e);
 
-        mouseOnDown = e.mouseState.position;
+        // to avoid code duplication
+        this.actionActivatedManually(e.mouseState.position);
+    }
+
+    public void actionActivatedManually(Vector2D mousePosition) {
+        mouseOnDown = mousePosition;
         originalFreeVertexPositions = selection.getFreeVertexPositions();
         originalElementPositions = selection.getElementPositions();
     }
@@ -56,10 +67,17 @@ public class MoveAction extends Action {
     }
 
     @Override
+    public void actionSubmitted() {
+        result = true;
+        super.actionSubmitted();
+    }
+
+    @Override
     public void actionCancelled() {
         selection.setFreeVertexPositions(originalFreeVertexPositions, Vector2D.ZERO);
         selection.setElementPositions(originalElementPositions, Vector2D.ZERO);
 
+        result = false;
         super.actionCancelled();
     }
 }
