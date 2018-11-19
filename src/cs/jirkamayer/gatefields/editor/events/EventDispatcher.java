@@ -95,7 +95,9 @@ public class EventDispatcher implements
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
+        mouseState.scroll = e.getWheelRotation();
 
+        this.dispatch(new Event(EventType.SCROLL));
     }
 
     /////////////////

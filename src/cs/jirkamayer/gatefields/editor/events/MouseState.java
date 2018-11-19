@@ -13,4 +13,9 @@ public class MouseState {
      * Button that caused this event to occur
      */
     public int causeButton = -1;
+
+    /**
+     * Scrolling value
+     */
+    public int scroll = 0;
 }
