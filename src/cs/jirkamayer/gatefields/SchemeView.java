@@ -1,5 +1,6 @@
 package cs.jirkamayer.gatefields;
 
+import cs.jirkamayer.gatefields.editor.events.EventDispatcher;
 import cs.jirkamayer.gatefields.math.Size2D;
 import cs.jirkamayer.gatefields.math.Vector2D;
 import cs.jirkamayer.gatefields.scheme.NotGate;
@@ -10,8 +11,8 @@ import java.awt.event.*;
 
 public class SchemeView extends Canvas {
     private Camera camera;
-
     private Scheme scheme;
+    private EventDispatcher eventDispatcher;
 
     private Vector2D cameraOnDown = null;
     private Vector2D mouseDown = null;
@@ -20,13 +21,23 @@ public class SchemeView extends Canvas {
     public SchemeView(Scheme scheme) {
         super();
 
-        this.scheme = scheme;
-
         this.camera = new Camera();
+        this.scheme = scheme;
+        this.eventDispatcher = new EventDispatcher();
+
+        /*eventDispatcher.addEventListener((e) -> {
+            for (boolean b : e.mouseState.buttonPressed)
+                System.out.print(b + ", ");
+            System.out.println();
+        });*/
 
         this.addMouseListener(new SchemeViewMouseListener());
         this.addMouseMotionListener(new SchemeViewMouseMotionListener());
         this.addMouseWheelListener(new SchemeViewMouseWheelListener());
+
+        this.addMouseListener(eventDispatcher);
+        /*this.addMouseMotionListener(eventDispatcher);
+        this.addMouseWheelListener(eventDispatcher);*/
     }
 
     public void paint(Graphics g) {
