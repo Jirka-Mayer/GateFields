@@ -47,6 +47,7 @@ public class EventDispatcher implements
     public void mousePressed(MouseEvent e) {
         mouseState.position = new Vector2D(e.getX(), e.getY());
         mouseState.buttonPressed[e.getButton()] = true;
+        mouseState.causeButton = e.getButton();
 
         this.dispatch(new Event(EventType.MOUSE_DOWN));
     }
@@ -55,6 +56,7 @@ public class EventDispatcher implements
     public void mouseReleased(MouseEvent e) {
         mouseState.position = new Vector2D(e.getX(), e.getY());
         mouseState.buttonPressed[e.getButton()] = false;
+        mouseState.causeButton = e.getButton();
 
         this.dispatch(new Event(EventType.MOUSE_UP));
     }
@@ -75,12 +77,16 @@ public class EventDispatcher implements
 
     @Override
     public void mouseDragged(MouseEvent e) {
+        mouseState.position = new Vector2D(e.getX(), e.getY());
 
+        this.dispatch(new Event(EventType.MOUSE_MOVE));
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        mouseState.position = new Vector2D(e.getX(), e.getY());
 
+        this.dispatch(new Event(EventType.MOUSE_MOVE));
     }
 
     ////////////////////////
@@ -103,14 +109,16 @@ public class EventDispatcher implements
 
     @Override
     public void keyPressed(KeyEvent e) {
-        keyState.buttonPressed[e.getKeyCode()] = true;
+        keyState.keyPressed[e.getKeyCode()] = true;
+        keyState.causeKey = e.getKeyCode();
 
         this.dispatch(new Event(EventType.KEY_DOWN));
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        keyState.buttonPressed[e.getKeyCode()] = false;
+        keyState.keyPressed[e.getKeyCode()] = false;
+        keyState.causeKey = e.getKeyCode();
 
         this.dispatch(new Event(EventType.KEY_UP));
     }

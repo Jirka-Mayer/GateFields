@@ -15,6 +15,8 @@ public class NotGate extends Element {
     public void draw(Camera c) {
         c.setTransform(transform);
 
+        Color color = this.selected ? Color.BLUE : Color.CYAN;
+
         // origin
         c.fillRect(
             new Vector2D(-0.1f, -0.1f),
@@ -23,14 +25,14 @@ public class NotGate extends Element {
         );
 
         // stem
-        c.drawLine(new Vector2D(-1, 0), new Vector2D(0, 0), 0.1f, Color.CYAN);
+        c.drawLine(new Vector2D(-1, 0), new Vector2D(0, 0), 0.1f, color);
 
         // triangle
-        c.drawLine(new Vector2D(0, -0.8f), new Vector2D(0, 0.8f), 0.1f, Color.CYAN);
-        c.drawLine(new Vector2D(0, -0.8f), new Vector2D(1, 0), 0.1f, Color.CYAN);
-        c.drawLine(new Vector2D(0, 0.8f), new Vector2D(1, 0), 0.1f, Color.CYAN);
+        c.drawLine(new Vector2D(0, -0.8f), new Vector2D(0, 0.8f), 0.1f, color);
+        c.drawLine(new Vector2D(0, -0.8f), new Vector2D(1, 0), 0.1f, color);
+        c.drawLine(new Vector2D(0, 0.8f), new Vector2D(1, 0), 0.1f, color);
 
         // peak
-        c.drawLine(new Vector2D(1, 0), new Vector2D(2, 0), 0.1f, Color.CYAN);
+        c.drawLine(new Vector2D(1, 0), new Vector2D(2, 0), 0.1f, color);
     }
 }

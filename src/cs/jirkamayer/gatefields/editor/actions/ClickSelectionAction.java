@@ -32,7 +32,7 @@ public class ClickSelectionAction extends Action {
         if (e.getEventType() != EventType.MOUSE_DOWN)
             return false;
 
-        return e.mouseState.buttonPressed[MouseState.RMB];
+        return e.mouseState.causeButton == MouseState.RMB;
     }
 
     @Override
@@ -63,10 +63,12 @@ public class ClickSelectionAction extends Action {
 
         // invert vertex selection if it's close enough
         if (closestDistance <= SELECTION_DISTANCE_PX) {
-            this.clickedOnVertex(closest, e.keyState.buttonPressed[KeyState.SHIFT]);
+            this.clickedOnVertex(closest, e.keyState.keyPressed[KeyState.SHIFT]);
         } else {
-            this.clickedInSpace(e.keyState.buttonPressed[KeyState.SHIFT]);
+            this.clickedInSpace(e.keyState.keyPressed[KeyState.SHIFT]);
         }
+
+        this.repaint();
 
         this.deactivate();
     }

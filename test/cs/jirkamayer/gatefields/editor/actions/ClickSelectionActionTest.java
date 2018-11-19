@@ -12,8 +12,6 @@ import cs.jirkamayer.gatefields.scheme.Vertex;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.security.Key;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -43,7 +41,7 @@ class ClickSelectionActionTest {
     void itSelectsAndDeselectsSingleVertex() {
         Event e = new Event(EventType.MOUSE_DOWN);
         e.keyState = new KeyState();
-        e.keyState.buttonPressed[KeyState.SHIFT] = true;
+        e.keyState.keyPressed[KeyState.SHIFT] = true;
 
         e.mouseState = new MouseState();
         e.mouseState.buttonPressed[2] = true;
