@@ -12,7 +12,7 @@ public class KeyState {
     public static final int W = 87;
     public static final int X = 88;
 
-    public boolean[] keyPressed = new boolean[256];
+    public boolean[] keyPressed = new boolean[1024];
 
     /**
      * Key that caused this event to occur

@@ -25,20 +25,9 @@ class MainWindow extends JFrame {
         scheme = new Scheme();
         selection = new Selection();
 
-        // fake scheme
-        Element notGate = new NotGate();
-        Vertex freeVertex = new Vertex(new Vector2D(5, 5));
-        Wire wire = new Wire(notGate.vertices.get(1), freeVertex);
-        scheme.add(notGate);
-        scheme.add(freeVertex);
-        scheme.add(wire);
+        this.setupUI();
 
-        sceneView = new SchemeView(scheme, selection);
-        sceneView.setSize(1200, 700);
-        this.add(sceneView);
-
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.pack();
+        this.openDefaultScheme();
 
         /*
         Timer timer = new Timer((int)(1000.0 / 1.0), (ActionEvent e) -> {
@@ -54,5 +43,27 @@ class MainWindow extends JFrame {
         });
         timer.start();
         */
+    }
+
+    private void setupUI() {
+        this.setJMenuBar(new MainMenu());
+
+        sceneView = new SchemeView(scheme, selection);
+        sceneView.setSize(1200, 700);
+        this.add(sceneView);
+
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.pack();
+    }
+
+    private void openDefaultScheme() {
+        Element notGate = new NotGate();
+        Vertex freeVertex = new Vertex(new Vector2D(5, 5));
+        Wire wire = new Wire(notGate.vertices.get(1), freeVertex);
+        scheme.add(notGate);
+        scheme.add(freeVertex);
+        scheme.add(wire);
+
+        sceneView.repaint();
     }
 }
