@@ -85,6 +85,15 @@ public class Scheme {
         elements.remove(e);
     }
 
+    public Wire getWire(Vertex a, Vertex b) {
+        for (Wire w : wiresAtVertex.get(a)) {
+            if ((w.start == a && w.end == b) || (w.end == a && w.start == b)) {
+                return w;
+            }
+        }
+        return null;
+    }
+
     public void draw(Camera c, Selection s) {
         for (Wire w : wires)
             w.draw(c, s);

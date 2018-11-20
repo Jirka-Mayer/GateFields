@@ -9,6 +9,7 @@ public class KeyState {
 
     public static final int E = 69;
     public static final int G = 71;
+    public static final int W = 87;
     public static final int X = 88;
 
     public boolean[] keyPressed = new boolean[256];

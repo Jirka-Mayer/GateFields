@@ -39,6 +39,7 @@ public class SchemeView extends Canvas {
         actionController.registerAction(new ClickSelectionAction(camera, scheme, selection));
         actionController.registerAction(new MoveAction(camera, selection));
         actionController.registerAction(new ExtrudeWireAction(camera, scheme, selection));
+        actionController.registerAction(new AddWireAction(selection, scheme));
     }
 
     public void paint(Graphics g) {
