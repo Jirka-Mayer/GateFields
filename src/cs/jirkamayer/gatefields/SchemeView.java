@@ -47,7 +47,7 @@ public class SchemeView extends Canvas {
 
         camera.clear(Color.BLACK);
 
-        scheme.draw(camera);
+        scheme.draw(camera, selection);
 
         /*
         g.setColor(Color.BLACK);

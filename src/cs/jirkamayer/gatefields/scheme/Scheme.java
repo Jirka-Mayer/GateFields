@@ -1,6 +1,7 @@
 package cs.jirkamayer.gatefields.scheme;
 
 import cs.jirkamayer.gatefields.Camera;
+import cs.jirkamayer.gatefields.editor.Selection;
 
 import java.util.*;
 
@@ -84,14 +85,14 @@ public class Scheme {
         elements.remove(e);
     }
 
-    public void draw(Camera c) {
+    public void draw(Camera c, Selection s) {
         for (Wire w : wires)
-            w.draw(c);
+            w.draw(c, s);
 
         for (Element e : elements)
-            e.draw(c);
+            e.draw(c, s);
 
         for (Vertex v : vertices)
-            v.draw(c);
+            v.draw(c, s);
     }
 }

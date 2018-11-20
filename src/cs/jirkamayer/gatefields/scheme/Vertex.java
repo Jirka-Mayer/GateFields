@@ -1,6 +1,7 @@
 package cs.jirkamayer.gatefields.scheme;
 
 import cs.jirkamayer.gatefields.Camera;
+import cs.jirkamayer.gatefields.editor.Selection;
 import cs.jirkamayer.gatefields.math.Size2D;
 import cs.jirkamayer.gatefields.math.Transform;
 import cs.jirkamayer.gatefields.math.Vector2D;
@@ -10,8 +11,6 @@ import java.awt.*;
 public class Vertex {
     public Transform transform;
     private Element boundElement;
-
-    public boolean selected;
 
     public Vertex(Vector2D position, Element boundElement) {
         transform = new Transform();
@@ -34,13 +33,13 @@ public class Vertex {
         return this.boundElement;
     }
 
-    public void draw(Camera c) {
+    public void draw(Camera c, Selection s) {
         c.setTransform(transform);
 
         c.fillRect(
             new Vector2D(-0.1f, -0.1f),
             new Size2D(0.2f, 0.2f),
-            selected ? Color.RED : Color.ORANGE
+            s.isSelected(this) ? Color.RED : Color.ORANGE
         );
     }
 }

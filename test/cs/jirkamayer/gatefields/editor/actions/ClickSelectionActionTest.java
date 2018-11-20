@@ -48,9 +48,9 @@ class ClickSelectionActionTest {
         e.mouseState.position = new Vector2D(700, 700);
 
         action.actionActivated(e);
-        assertTrue(vertex.selected);
+        assertTrue(selection.isSelected(vertex));
 
         action.actionActivated(e);
-        assertFalse(vertex.selected);
+        assertFalse(selection.isSelected(vertex));
     }
 }

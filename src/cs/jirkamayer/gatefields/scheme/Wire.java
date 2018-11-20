@@ -2,6 +2,7 @@ package cs.jirkamayer.gatefields.scheme;
 
 import com.sun.istack.internal.NotNull;
 import cs.jirkamayer.gatefields.Camera;
+import cs.jirkamayer.gatefields.editor.Selection;
 
 import java.awt.*;
 
@@ -13,7 +14,7 @@ public class Wire {
         this.end = end;
     }
 
-    public void draw(Camera c) {
+    public void draw(Camera c, Selection s) {
         // TODO: draw more sophisticatedly
         c.setTransform(null);
         c.drawLine(start.transform.getPosition(), end.transform.getPosition(), 0.1f, Color.CYAN);

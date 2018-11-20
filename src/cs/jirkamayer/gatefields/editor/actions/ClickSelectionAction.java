@@ -81,7 +81,7 @@ public class ClickSelectionAction extends Action {
         if (!shift)
             selection.deselectAll();
 
-        if (vertex.selected) {
+        if (selection.isSelected(vertex)) {
             selection.deselect(vertex);
         } else {
             selection.select(vertex);

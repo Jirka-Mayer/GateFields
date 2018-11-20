@@ -12,15 +12,15 @@ class SelectionTest {
         Selection selection = new Selection();
 
         selection.select(e.vertices.get(0));
-        assertTrue(e.selected, "Element has not been selected");
+        assertTrue(selection.isSelected(e), "Element has not been selected");
 
         selection.select(e.vertices.get(1));
-        assertTrue(e.selected, "Element should stay selected on selection");
+        assertTrue(selection.isSelected(e), "Element should stay selected on selection");
 
         selection.deselect(e.vertices.get(0));
-        assertTrue(e.selected, "Element should stay selected on partial deselection");
+        assertTrue(selection.isSelected(e), "Element should stay selected on partial deselection");
 
         selection.deselect(e.vertices.get(1));
-        assertFalse(e.selected, "Element should have been deselected");
+        assertFalse(selection.isSelected(e), "Element should have been deselected");
     }
 }
