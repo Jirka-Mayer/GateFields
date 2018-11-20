@@ -46,11 +46,17 @@ class MainWindow extends JFrame {
     }
 
     private void setupUI() {
-        this.setJMenuBar(new MainMenu());
-
         sceneView = new SchemeView(scheme, selection);
         sceneView.setSize(1200, 700);
         this.add(sceneView);
+
+        this.setJMenuBar(
+            new MainMenu(
+                scheme,
+                sceneView.getActionController(),
+                sceneView.getCamera()
+            )
+        );
 
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.pack();

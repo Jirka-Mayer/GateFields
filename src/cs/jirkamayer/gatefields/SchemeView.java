@@ -32,6 +32,14 @@ public class SchemeView extends Canvas {
         this.addKeyListener(eventDispatcher);
     }
 
+    public ActionController getActionController() {
+        return actionController;
+    }
+
+    public Camera getCamera() {
+        return camera;
+    }
+
     private void registerAllActions()
     {
         actionController.registerAction(new MoveCameraAction(camera));

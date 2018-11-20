@@ -21,6 +21,19 @@ public class ActionController implements
         this.repaintCallback = repaintCallback;
     }
 
+    /**
+     * Feed events to a manually activated action
+     */
+    public void activateActionManually(Action a) {
+        if (activeAction != null)
+            return;
+
+        a.setDeactivationCallback(this);
+        a.setRepaintCallback(this);
+        activeAction = a;
+        a.actionActivatedManually();
+    }
+
     @Override
     public void eventOccurred(Event e) {
         if (activeAction == null) {

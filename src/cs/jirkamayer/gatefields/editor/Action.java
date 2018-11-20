@@ -34,6 +34,10 @@ public abstract class Action {
 
     }
 
+    public void actionActivatedManually() {
+
+    }
+
     public final void deactivate() {
         if (deactivationCallback != null)
             deactivationCallback.deactivateAction(this);

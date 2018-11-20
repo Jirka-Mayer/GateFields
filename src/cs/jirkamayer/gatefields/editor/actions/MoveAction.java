@@ -44,6 +44,7 @@ public class MoveAction extends Action {
         this.actionActivatedManually(e.mouseState.position);
     }
 
+    // not an override since this action can be activated non-manually as well
     public void actionActivatedManually(Vector2D mousePosition) {
         mouseOnDown = mousePosition;
         originalFreeVertexPositions = selection.getFreeVertexPositions();

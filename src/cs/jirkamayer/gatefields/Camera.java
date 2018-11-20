@@ -59,6 +59,12 @@ public class Camera {
         return sz * scale;
     }
 
+    public Vector2D screenToWorld(Vector2D v) {
+        return v.minus(new Vector2D(displayWidth / 2f, displayHeight / 2f))
+            .plus(position)
+            .divide(scale);
+    }
+
     public Vector2D localToScreen(Vector2D v) {
         if (transform != null)
             v = transform.transformLocalToGlobal(v);

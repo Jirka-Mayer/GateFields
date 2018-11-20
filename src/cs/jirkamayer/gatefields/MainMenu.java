@@ -1,11 +1,25 @@
 package cs.jirkamayer.gatefields;
 
+import cs.jirkamayer.gatefields.editor.actions.ActionController;
+import cs.jirkamayer.gatefields.editor.actions.AddElementAction;
+import cs.jirkamayer.gatefields.scheme.Element;
+import cs.jirkamayer.gatefields.scheme.NotGate;
+import cs.jirkamayer.gatefields.scheme.Scheme;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 public class MainMenu extends JMenuBar {
-    public MainMenu() {
+    private Scheme scheme;
+    private ActionController actionController;
+    private Camera camera;
+
+    public MainMenu(Scheme scheme, ActionController actionController, Camera camera) {
+        this.scheme = scheme;
+        this.actionController = actionController;
+        this.camera = camera;
+
         this.buildFileMenu();
         this.buildAddMenu();
     }
@@ -48,5 +62,9 @@ public class MainMenu extends JMenuBar {
 
     private void addNotGate() {
         System.out.println("Add not gate...");
+
+        Element element = new NotGate();
+        AddElementAction action = new AddElementAction(scheme, element, camera);
+        actionController.activateActionManually(action);
     }
 }
