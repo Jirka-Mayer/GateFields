@@ -18,7 +18,6 @@ public class NotGate extends Element {
         Renderer r = c.getRenderer();
         c.setTransform(transform);
 
-        Color color = s.isSelected(this) ? Color.BLUE : Color.CYAN;
         boolean selected = s.isSelected(this);
 
         // stem

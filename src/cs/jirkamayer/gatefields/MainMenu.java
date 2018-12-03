@@ -3,6 +3,7 @@ package cs.jirkamayer.gatefields;
 import cs.jirkamayer.gatefields.editor.actions.ActionController;
 import cs.jirkamayer.gatefields.editor.actions.AddElementAction;
 import cs.jirkamayer.gatefields.scheme.Element;
+import cs.jirkamayer.gatefields.scheme.LogicalInput;
 import cs.jirkamayer.gatefields.scheme.NotGate;
 import cs.jirkamayer.gatefields.scheme.Scheme;
 
@@ -44,8 +45,13 @@ public class MainMenu extends JMenuBar {
         JMenu addMenu = new JMenu("Add");
         addMenu.setMnemonic('A');
 
+        JMenuItem inputGate = new JMenuItem("Input");
+        inputGate.addActionListener((x) -> this.addGate(new LogicalInput()));
+        inputGate.setMnemonic('I');
+        addMenu.add(inputGate);
+
         JMenuItem notGate = new JMenuItem("NOT gate");
-        notGate.addActionListener((x) -> this.addNotGate());
+        notGate.addActionListener((x) -> this.addGate(new NotGate()));
         notGate.setMnemonic('N');
         addMenu.add(notGate);
 
@@ -60,10 +66,7 @@ public class MainMenu extends JMenuBar {
         System.out.println("TODO: Save file!");
     }
 
-    private void addNotGate() {
-        System.out.println("Add not gate...");
-
-        Element element = new NotGate();
+    private void addGate(Element element) {
         AddElementAction action = new AddElementAction(scheme, element, camera);
         actionController.activateActionManually(action);
     }
