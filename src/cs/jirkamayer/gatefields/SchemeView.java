@@ -18,6 +18,7 @@ public class SchemeView extends Canvas {
         super();
 
         this.camera = new Camera();
+        this.camera.setRenderer(new DefaultRenderer(camera));
         this.scheme = scheme;
         this.selection = selection;
         this.eventDispatcher = new EventDispatcher();
@@ -55,20 +56,8 @@ public class SchemeView extends Canvas {
         camera.setGraphics(g);
         camera.setDisplayDimensions(this.getWidth(), this.getHeight());
 
-        camera.clear(Color.BLACK);
-
+        camera.getRenderer().clear();
         scheme.draw(camera, selection);
-
         actionController.drawActions(camera);
-
-        /*
-        g.setColor(Color.BLACK);
-        g.fillOval(
-            100,
-            100,
-            50,
-            50
-        );
-        */
     }
 }

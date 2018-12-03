@@ -28,6 +28,8 @@ public class Camera {
      */
     private Transform transform = null;
 
+    private Renderer renderer = null;
+
     public void setGraphics(Graphics g) {
         this.g = (Graphics2D)g;
     }
@@ -39,6 +41,14 @@ public class Camera {
 
     public void setTransform(Transform t) {
         transform = t;
+    }
+
+    public Renderer getRenderer() {
+        return renderer;
+    }
+
+    public void setRenderer(Renderer renderer) {
+        this.renderer = renderer;
     }
 
     /////////////////////
@@ -110,9 +120,43 @@ public class Camera {
     }
 
     public void drawScreenLine(Vector2D a, Vector2D b, float width, Color color) {
-        g.setStroke(new BasicStroke(width));
+        g.setStroke(new BasicStroke(width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
         g.setColor(color);
 
         g.drawLine((int)a.x, (int)a.y, (int)b.x, (int)b.y);
+    }
+
+    public void drawCircle(Vector2D center, float radius, float width, Color color) {
+        this.drawScreenCircle(
+            this.localToScreen(center),
+            this.localToScreen(radius),
+            this.localToScreen(width),
+            color
+        );
+    }
+
+    public void drawScreenCircle(Vector2D center, float radius, float width, Color color) {
+        Vector2D pos = center.minus(new Vector2D(radius, radius));
+        int size = (int)(radius * 2);
+
+        g.setColor(color);
+        g.setStroke(new BasicStroke(width));
+        g.drawOval((int)pos.x, (int)pos.y, size, size);
+    }
+
+    public void fillCircle(Vector2D center, float radius, Color color) {
+        this.fillScreenCircle(
+            this.localToScreen(center),
+            this.localToScreen(radius),
+            color
+        );
+    }
+
+    public void fillScreenCircle(Vector2D center, float radius, Color color) {
+        Vector2D pos = center.minus(new Vector2D(radius, radius));
+        int size = (int)(radius * 2);
+
+        g.setColor(color);
+        g.fillOval((int)pos.x, (int)pos.y, size, size);
     }
 }

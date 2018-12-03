@@ -1,6 +1,7 @@
 package cs.jirkamayer.gatefields.scheme;
 
 import cs.jirkamayer.gatefields.Camera;
+import cs.jirkamayer.gatefields.Renderer;
 import cs.jirkamayer.gatefields.editor.Selection;
 import cs.jirkamayer.gatefields.math.Size2D;
 import cs.jirkamayer.gatefields.math.Transform;
@@ -35,11 +36,6 @@ public class Vertex {
 
     public void draw(Camera c, Selection s) {
         c.setTransform(transform);
-
-        c.fillRect(
-            new Vector2D(-0.1f, -0.1f),
-            new Size2D(0.2f, 0.2f),
-            s.isSelected(this) ? Color.RED : Color.ORANGE
-        );
+        c.getRenderer().drawVertex(Vector2D.ZERO, s.isSelected(this));
     }
 }

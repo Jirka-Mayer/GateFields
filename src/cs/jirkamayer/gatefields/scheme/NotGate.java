@@ -1,6 +1,7 @@
 package cs.jirkamayer.gatefields.scheme;
 
 import cs.jirkamayer.gatefields.Camera;
+import cs.jirkamayer.gatefields.Renderer;
 import cs.jirkamayer.gatefields.editor.Selection;
 import cs.jirkamayer.gatefields.math.Size2D;
 import cs.jirkamayer.gatefields.math.Vector2D;
@@ -14,26 +15,27 @@ public class NotGate extends Element {
     }
 
     public void draw(Camera c, Selection s) {
+        Renderer r = c.getRenderer();
         c.setTransform(transform);
 
         Color color = s.isSelected(this) ? Color.BLUE : Color.CYAN;
-
-        // origin
-        c.fillRect(
-            new Vector2D(-0.1f, -0.1f),
-            new Size2D(0.2f, 0.2f),
-            Color.ORANGE
-        );
+        boolean selected = s.isSelected(this);
 
         // stem
-        c.drawLine(new Vector2D(-1, 0), new Vector2D(0, 0), 0.1f, color);
+        r.drawWire(new Vector2D(-1, 0), new Vector2D(0, 0), false, selected);
 
         // triangle
-        c.drawLine(new Vector2D(0, -0.8f), new Vector2D(0, 0.8f), 0.1f, color);
-        c.drawLine(new Vector2D(0, -0.8f), new Vector2D(1, 0), 0.1f, color);
-        c.drawLine(new Vector2D(0, 0.8f), new Vector2D(1, 0), 0.1f, color);
+        r.drawElementLine(new Vector2D(0, -0.8f), new Vector2D(0, 0.8f), selected);
+        r.drawElementLine(new Vector2D(0, -0.8f), new Vector2D(1, 0), selected);
+        r.drawElementLine(new Vector2D(0, 0.8f), new Vector2D(1, 0), selected);
 
         // peak
-        c.drawLine(new Vector2D(1, 0), new Vector2D(2, 0), 0.1f, color);
+        r.drawWire(new Vector2D(1, 0), new Vector2D(2, 0), false, selected);
+
+        // circle
+        r.drawElementCircle(new Vector2D(1.1f, 0), selected);
+
+        // origin
+        r.drawElementOrigin(Vector2D.ZERO, selected);
     }
 }
