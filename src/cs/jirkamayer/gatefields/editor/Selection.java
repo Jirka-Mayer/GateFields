@@ -20,6 +20,14 @@ public class Selection {
         return Collections.unmodifiableList(vertices);
     }
 
+    public List<Vertex> getFreeVertices() {
+        return Collections.unmodifiableList(freeVertices);
+    }
+
+    public List<Element> getElements() {
+        return Collections.unmodifiableList(elements);
+    }
+
     public boolean isSelected(Vertex v) {
         return vertexSet.contains(v);
     }
@@ -94,44 +102,5 @@ public class Selection {
         }
 
         this.deselectJustElement(e);
-    }
-
-    ////////////////////////
-    // MoveAction helpers //
-    ////////////////////////
-    // (to keep the underlying lists encapsulated)
-
-    public Vector2D[] getFreeVertexPositions() {
-        Vector2D[] out = new Vector2D[freeVertices.size()];
-
-        for (int i = 0; i < out.length; i++)
-            out[i] = freeVertices.get(i).transform.getPosition();
-
-        return out;
-    }
-
-    public void setFreeVertexPositions(Vector2D[] pos, Vector2D delta) {
-        if (pos.length != freeVertices.size())
-            throw new IllegalArgumentException("Wrong array size.");
-
-        for (int i = 0; i < pos.length; i++)
-            freeVertices.get(i).transform.setPosition(pos[i].plus(delta));
-    }
-
-    public Vector2D[] getElementPositions() {
-        Vector2D[] out = new Vector2D[elements.size()];
-
-        for (int i = 0; i < out.length; i++)
-            out[i] = elements.get(i).transform.getPosition();
-
-        return out;
-    }
-
-    public void setElementPositions(Vector2D[] pos, Vector2D delta) {
-        if (pos.length != elements.size())
-            throw new IllegalArgumentException("Wrong array size.");
-
-        for (int i = 0; i < pos.length; i++)
-            elements.get(i).transform.setPosition(pos[i].plus(delta));
     }
 }
