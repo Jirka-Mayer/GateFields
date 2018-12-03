@@ -63,12 +63,18 @@ class MainWindow extends JFrame {
     }
 
     private void openDefaultScheme() {
+        Element input = new LogicalInput();
+        input.transform.setPosition(new Vector2D(-4, 0));
+
         Element notGate = new NotGate();
         Vertex freeVertex = new Vertex(new Vector2D(5, 5));
-        Wire wire = new Wire(notGate.vertices.get(1), freeVertex);
+
+        scheme.add(input);
         scheme.add(notGate);
         scheme.add(freeVertex);
-        scheme.add(wire);
+
+        scheme.add(new Wire(input.vertices.get(0), notGate.vertices.get(0)));
+        scheme.add(new Wire(notGate.vertices.get(1), freeVertex));
 
         sceneView.repaint();
     }
