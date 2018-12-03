@@ -52,6 +52,11 @@ public class MoveAction extends Action {
     public void actionActivated(Event e) {
         super.actionActivated(e);
 
+        if (selection.isEmpty()) {
+            this.deactivate();
+            return;
+        }
+
         // to avoid code duplication
         this.actionActivatedManually(e.mouseState.position);
     }

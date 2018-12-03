@@ -51,6 +51,10 @@ public class Vector2D {
         return this.x == v.x && this.y == v.y;
     }
 
+    public float angle() {
+        return (float)Math.atan2(this.y, this.x);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Vector2D) {

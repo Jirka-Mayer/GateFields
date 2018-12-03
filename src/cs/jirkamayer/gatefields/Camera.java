@@ -101,10 +101,15 @@ public class Camera {
     }
 
     public void drawLine(Vector2D a, Vector2D b, float width, Color color) {
-        a = this.localToScreen(a);
-        b = this.localToScreen(b);
-        width = this.localToScreen(width);
+        this.drawScreenLine(
+            this.localToScreen(a),
+            this.localToScreen(b),
+            this.localToScreen(width),
+            color
+        );
+    }
 
+    public void drawScreenLine(Vector2D a, Vector2D b, float width, Color color) {
         g.setStroke(new BasicStroke(width));
         g.setColor(color);
 

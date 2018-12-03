@@ -1,5 +1,6 @@
 package cs.jirkamayer.gatefields.editor.actions;
 
+import cs.jirkamayer.gatefields.Camera;
 import cs.jirkamayer.gatefields.editor.Action;
 import cs.jirkamayer.gatefields.editor.events.Event;
 import cs.jirkamayer.gatefields.editor.events.EventDispatcher;
@@ -70,5 +71,12 @@ public class ActionController implements
     public void repaint() {
         if (this.repaintCallback != null)
             this.repaintCallback.repaint();
+    }
+
+    public void drawActions(Camera camera) {
+        if (activeAction == null)
+            return;
+
+        activeAction.drawAction(camera);
     }
 }

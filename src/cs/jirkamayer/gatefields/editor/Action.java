@@ -1,5 +1,6 @@
 package cs.jirkamayer.gatefields.editor;
 
+import cs.jirkamayer.gatefields.Camera;
 import cs.jirkamayer.gatefields.editor.events.Event;
 import cs.jirkamayer.gatefields.editor.events.EventType;
 import cs.jirkamayer.gatefields.editor.events.KeyState;
@@ -71,5 +72,9 @@ public abstract class Action {
     protected void repaint() {
         if (repaintCallback != null)
             repaintCallback.repaint();
+    }
+
+    public void drawAction(Camera camera) {
+        // override to draw custom UI when action is active
     }
 }

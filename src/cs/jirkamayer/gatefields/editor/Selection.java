@@ -40,6 +40,12 @@ public class Selection {
         return this.isSelected(w.start) && this.isSelected(w.end);
     }
 
+    public boolean isEmpty() {
+        // no need to check for elements or wires, because
+        // they are conditioned by vertices
+        return vertices.size() == 0;
+    }
+
     public void select(Vertex v) {
         if (isSelected(v))
             return;

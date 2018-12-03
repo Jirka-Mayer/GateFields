@@ -46,6 +46,7 @@ public class SchemeView extends Canvas {
         actionController.registerAction(new ZoomCameraAction(camera));
         actionController.registerAction(new ClickSelectionAction(camera, scheme, selection));
         actionController.registerAction(new MoveAction(camera, selection));
+        actionController.registerAction(new RotateAction(camera, selection));
         actionController.registerAction(new ExtrudeWireAction(camera, scheme, selection));
         actionController.registerAction(new AddWireAction(selection, scheme));
     }
@@ -57,6 +58,8 @@ public class SchemeView extends Canvas {
         camera.clear(Color.BLACK);
 
         scheme.draw(camera, selection);
+
+        actionController.drawActions(camera);
 
         /*
         g.setColor(Color.BLACK);
