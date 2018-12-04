@@ -32,14 +32,14 @@ což zjednoduší logiku šíření signálu.
 
 Stav signálu v celém schématu drží třída `Simulator`.
 
-Fronta simulace je ve třídě `SimulationQueue`. Do ní se přidávání události,
+Fronta simulace je ve třídě `SimulationQueue`. Do ní se přidávají události,
 které jsou zavolány ve chvíli zpracování:
 
 ```java
 SimulationQueue queue = new SimulationQueue();
-queue.add(new SimulationEvent(() -> {
+queue.add(0.1, () -> {
     // handle the event, register new events as a result
-}));
+});
 ```
 
 Simulační fronta je součást simulátoru:
@@ -87,7 +87,7 @@ Jelikož může dojít ke změně většího počtu vrcholů, simulátor neprove
 šíření signálu, dokud mu explicitně neřekneme.
 
 ```java
-simulator.propagateSignals();
+simulator.processVertexActivations();
 ```
 
 Během tohoto volání napočítá, jak se změní stavy vrcholů, sestaví seznam probuzených hradel

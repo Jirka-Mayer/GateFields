@@ -38,6 +38,8 @@ public class Scheme {
 
         for (Vertex v : e.vertices)
             this.addBoundVertex(v);
+
+        simulator.elementAdded(e);
     }
 
     public void add(Vertex v) {
@@ -72,6 +74,7 @@ public class Scheme {
 
         vertices.remove(v);
         wiresAtVertex.remove(v);
+        simulator.vertexRemoved(v);
     }
 
     private void removeBoundVertex(Vertex v) {
@@ -80,6 +83,7 @@ public class Scheme {
 
         vertices.remove(v);
         wiresAtVertex.remove(v);
+        simulator.vertexRemoved(v);
     }
 
     public void remove(Wire w) {

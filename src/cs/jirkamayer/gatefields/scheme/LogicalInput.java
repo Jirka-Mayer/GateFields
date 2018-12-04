@@ -23,6 +23,8 @@ public class LogicalInput extends Element {
             simulator.activateVertex(vertices.get(0));
         else
             simulator.deactivateVertex(vertices.get(0));
+
+        simulator.processVertexActivations();
     }
 
     @Override

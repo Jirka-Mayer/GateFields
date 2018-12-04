@@ -29,20 +29,12 @@ class MainWindow extends JFrame {
 
         this.openDefaultScheme();
 
-        /*
-        Timer timer = new Timer((int)(1000.0 / 1.0), (ActionEvent e) -> {
-            //this.update();
-            ((SceneView) canvas).angle += 0.1;
-
-            //Graphics g = canvas.getGraphics();
-            //g.clearRect(0, 0, 500, 500);
-            //canvas.paint(g);
-            canvas.repaint();
-
-            //System.out.println(((SceneView) canvas).angle);
+        Timer timer = new Timer((int)(1000.0 / 10.0), (ActionEvent e) -> {
+            //System.out.println("Tick!");
+            scheme.getSimulator().simulationTick(0.1);
+            sceneView.repaint();
         });
         timer.start();
-        */
     }
 
     private void setupUI() {
@@ -75,6 +67,8 @@ class MainWindow extends JFrame {
 
         scheme.add(new Wire(input.vertices.get(0), notGate.vertices.get(0)));
         scheme.add(new Wire(notGate.vertices.get(1), freeVertex));
+
+        scheme.getSimulator().processVertexActivations();
 
         sceneView.repaint();
     }

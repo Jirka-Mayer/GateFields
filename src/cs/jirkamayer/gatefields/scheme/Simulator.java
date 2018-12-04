@@ -8,7 +8,12 @@ public class Simulator {
     private Set<Vertex> activeVertices = new HashSet<>();
     private Dictionary<Vertex, Component> componentAtVertex = new Hashtable<>();
 
-    private static class Component {
+    // Elements that should be examined due to signal propagation
+    private Set<Element> touchedElements = new HashSet<>();
+
+    private SimulationQueue simulationQueue = new SimulationQueue();
+
+    private class Component {
         public Set<Vertex> vertices = new HashSet<>();
         public int activeVertices = 0;
 
@@ -21,6 +26,10 @@ public class Simulator {
         this.scheme = scheme;
     }
 
+    public SimulationQueue getSimulationQueue() {
+        return simulationQueue;
+    }
+
     public boolean hasSignal(Vertex v) {
         return componentAtVertex.get(v).isActive();
     }
@@ -30,14 +39,76 @@ public class Simulator {
         return this.hasSignal(w.start) && this.hasSignal(w.end);
     }
 
-    public void activateVertex(Vertex v) {
-        activeVertices.add(v);
-        componentAtVertex.get(v).activeVertices++;
+    public boolean isActive(Vertex v) {
+        return activeVertices.contains(v);
     }
 
-    public void deactivateVertex(Vertex v) {
-        activeVertices.remove(v);
-        componentAtVertex.get(v).activeVertices--;
+    private void touchElementsInComponent(Component c) {
+        for (Vertex v : c.vertices) {
+            if (activeVertices.contains(v))
+                continue;
+
+            if (v.isBound())
+                touchedElements.add(v.getBoundElement());
+        }
+    }
+
+    ////////////////////////
+    // Vertex activations //
+    ////////////////////////
+
+    public void activateVertex(Vertex vertex) {
+        Component c = componentAtVertex.get(vertex);
+
+        activeVertices.add(vertex);
+        c.activeVertices++;
+
+        // was active before
+        if (c.activeVertices > 1)
+            return;
+
+        this.touchElementsInComponent(c);
+    }
+
+    public void deactivateVertex(Vertex vertex) {
+        Component c = componentAtVertex.get(vertex);
+
+        activeVertices.remove(vertex);
+        c.activeVertices--;
+
+        // stayed active
+        if (c.isActive()) {
+            // just feed signal back to the element
+            if (vertex.isBound())
+                touchedElements.add(vertex.getBoundElement());
+
+            return;
+        }
+
+        this.touchElementsInComponent(c);
+    }
+
+    public void processVertexActivations() {
+        for (Element e : touchedElements)
+            e.signalsChanged(this);
+        touchedElements.clear();
+    }
+
+    /////////////////////
+    // Gate simulation //
+    /////////////////////
+
+    public void simulationTick(double elapsedTime) {
+        if (!touchedElements.isEmpty())
+            this.processVertexActivations();
+
+        simulationQueue.advanceTime(elapsedTime);
+
+        while (simulationQueue.hasItemToExecute()) {
+            simulationQueue.executeNext(this);
+        }
+
+        this.processVertexActivations();
     }
 
     ////////////////////
@@ -51,16 +122,30 @@ public class Simulator {
         componentAtVertex.put(v, c);
     }
 
+    public void vertexRemoved(Vertex v) {
+        componentAtVertex.remove(v);
+    }
+
+    public void elementAdded(Element e) {
+        e.initializeSignals(this);
+    }
+
     public void wireAdded(Wire w) {
         Component a = componentAtVertex.get(w.start);
         Component b = componentAtVertex.get(w.end);
 
-        if (a != b)
-            this.joinComponents(a, b);
+        if (a == b)
+            return;
+
+        Component j = this.joinComponents(a, b);
+
+        if (a.isActive() != b.isActive())
+            this.touchElementsInComponent(j);
     }
 
     public void wireRemoved(Wire w) {
         Set<Vertex> startVertices = this.constructComponent(w.start);
+        Component originalComponent = componentAtVertex.get(w.start);
 
         if (startVertices.contains(w.end))
             return;
@@ -81,9 +166,15 @@ public class Simulator {
             if (activeVertices.contains(v))
                 b.activeVertices++;
         }
+
+        if (a.isActive() != originalComponent.isActive())
+            this.touchElementsInComponent(a);
+
+        if (b.isActive() != originalComponent.isActive())
+            this.touchElementsInComponent(b);
     }
 
-    private void joinComponents(Component a, Component b) {
+    private Component joinComponents(Component a, Component b) {
         Component j = new Component();
 
         j.vertices.addAll(a.vertices);
@@ -95,6 +186,8 @@ public class Simulator {
 
         for (Vertex v : b.vertices)
             componentAtVertex.put(v, j);
+
+        return j;
     }
 
     private Set<Vertex> constructComponent(Vertex v) {
