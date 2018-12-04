@@ -20,10 +20,10 @@ public class DefaultRenderer implements Renderer {
     }
 
     @Override
-    public void drawVertex(Vector2D pos, boolean selected) {
+    public void drawVertex(Vector2D pos, boolean signal, boolean selected) {
         camera.fillCircle(
             pos, 0.1f,
-            selected ? Color.CYAN : Color.DARK_GRAY
+            selected ? Color.CYAN : (signal ? Color.GREEN : Color.DARK_GRAY)
         );
     }
 

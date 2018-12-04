@@ -15,12 +15,12 @@ public class Wire {
         this.end = end;
     }
 
-    public void draw(Camera c, Selection s) {
+    public void draw(Camera c, Selection s, Simulator sim) {
         c.setTransform(null);
         c.getRenderer().drawWire(
             start.transform.getPosition(),
             end.transform.getPosition(),
-            false, // signal
+            sim.hasSignal(this),
             s.isSelected(this)
         );
     }

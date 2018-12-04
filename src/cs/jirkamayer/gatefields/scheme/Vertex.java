@@ -7,8 +7,6 @@ import cs.jirkamayer.gatefields.math.Size2D;
 import cs.jirkamayer.gatefields.math.Transform;
 import cs.jirkamayer.gatefields.math.Vector2D;
 
-import java.awt.*;
-
 public class Vertex {
     public Transform transform;
     private Element boundElement;
@@ -34,8 +32,12 @@ public class Vertex {
         return this.boundElement;
     }
 
-    public void draw(Camera c, Selection s) {
+    public void draw(Camera c, Selection s, Simulator sim) {
         c.setTransform(transform);
-        c.getRenderer().drawVertex(Vector2D.ZERO, s.isSelected(this));
+        c.getRenderer().drawVertex(
+            Vector2D.ZERO,
+            sim.hasSignal(this),
+            s.isSelected(this)
+        );
     }
 }

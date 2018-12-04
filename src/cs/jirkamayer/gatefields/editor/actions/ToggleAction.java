@@ -9,6 +9,7 @@ import cs.jirkamayer.gatefields.editor.events.KeyState;
 import cs.jirkamayer.gatefields.scheme.Element;
 import cs.jirkamayer.gatefields.scheme.LogicalInput;
 import cs.jirkamayer.gatefields.scheme.Scheme;
+import cs.jirkamayer.gatefields.scheme.Simulator;
 
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class ToggleAction extends Action {
 
         // toggle
         LogicalInput input = (LogicalInput) closest;
-        input.setState(!input.getState());
+        input.setState(!input.getState(), scheme.getSimulator());
 
         this.deactivate();
         this.repaint();

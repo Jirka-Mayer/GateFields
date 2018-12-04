@@ -10,6 +10,8 @@ public class Scheme {
     private List<Element> elements = new ArrayList<>();
     private List<Wire> wires = new ArrayList<>();
 
+    private Simulator simulator = new Simulator(this);
+
     /**
      * Helps traversing the scheme
      */
@@ -27,6 +29,10 @@ public class Scheme {
         return Collections.unmodifiableList(wires);
     }
 
+    public Simulator getSimulator() {
+        return simulator;
+    }
+
     public void add(Element e) {
         elements.add(e);
 
@@ -40,17 +46,21 @@ public class Scheme {
 
         vertices.add(v);
         wiresAtVertex.put(v, new ArrayList<>());
+        simulator.vertexAdded(v);
     }
 
     private void addBoundVertex(Vertex v) {
         vertices.add(v);
         wiresAtVertex.put(v, new ArrayList<>());
+        simulator.vertexAdded(v);
     }
 
     public void add(Wire w) {
         wires.add(w);
         wiresAtVertex.get(w.start).add(w);
         wiresAtVertex.get(w.end).add(w);
+
+        simulator.wireAdded(w);
     }
 
     public void remove(Vertex v) {
@@ -76,6 +86,8 @@ public class Scheme {
         wiresAtVertex.get(w.start).remove(w);
         wiresAtVertex.get(w.end).remove(w);
         wires.remove(w);
+
+        simulator.wireRemoved(w);
     }
 
     public void remove(Element e) {
@@ -94,14 +106,27 @@ public class Scheme {
         return null;
     }
 
+    public List<Vertex> getVertexNeighbors(Vertex v) {
+        List<Vertex> neighbors = new ArrayList<>();
+
+        for (Wire w : wiresAtVertex.get(v)) {
+            if (w.start == v)
+                neighbors.add(w.end);
+            else
+                neighbors.add(w.start);
+        }
+
+        return neighbors;
+    }
+
     public void draw(Camera c, Selection s) {
         for (Wire w : wires)
-            w.draw(c, s);
+            w.draw(c, s, simulator);
 
         for (Element e : elements)
-            e.draw(c, s);
+            e.draw(c, s, simulator);
 
         for (Vertex v : vertices)
-            v.draw(c, s);
+            v.draw(c, s, simulator);
     }
 }

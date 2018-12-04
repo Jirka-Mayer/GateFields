@@ -16,12 +16,17 @@ public class LogicalInput extends Element {
         return state;
     }
 
-    public void setState(boolean state) {
+    public void setState(boolean state, Simulator simulator) {
         this.state = state;
+
+        if (state)
+            simulator.activateVertex(vertices.get(0));
+        else
+            simulator.deactivateVertex(vertices.get(0));
     }
 
     @Override
-    public void draw(Camera c, Selection s) {
+    public void draw(Camera c, Selection s, Simulator sim) {
         Renderer r = c.getRenderer();
         c.setTransform(transform);
 
