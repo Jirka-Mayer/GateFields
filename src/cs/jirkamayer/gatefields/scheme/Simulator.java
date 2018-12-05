@@ -99,8 +99,7 @@ public class Simulator {
     /////////////////////
 
     public void simulationTick(double elapsedTime) {
-        if (!touchedElements.isEmpty())
-            this.processVertexActivations();
+        this.processVertexActivations();
 
         simulationQueue.advanceTime(elapsedTime);
 

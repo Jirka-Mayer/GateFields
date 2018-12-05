@@ -8,7 +8,7 @@ import cs.jirkamayer.gatefields.math.Vector2D;
 public class NotGate extends Element {
     public static double DELAY = 0.2;
 
-    private Vertex inputVertex, outputVertex;
+    public Vertex inputVertex, outputVertex;
 
     private SimulationEvent activateOutput = (Simulator sim) -> {
         sim.activateVertex(outputVertex);
