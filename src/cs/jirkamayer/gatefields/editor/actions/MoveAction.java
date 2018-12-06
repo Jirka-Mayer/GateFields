@@ -87,6 +87,12 @@ public class MoveAction extends Action {
 
         if (e.getEventType() == EventType.MOUSE_MOVE) {
             Vector2D delta = e.mouseState.position.minus(mouseOnDown).divide(camera.scale);
+
+            // clamp delta to units halves
+            if (!e.keyState.keyPressed[KeyState.SHIFT]) {
+                delta = delta.times(2).round().divide(2);
+            }
+
             this.moveItemsByDelta(delta);
             this.repaint();
         }

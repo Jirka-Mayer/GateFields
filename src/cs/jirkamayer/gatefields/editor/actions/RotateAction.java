@@ -94,7 +94,7 @@ public class RotateAction extends Action {
             float delta = currentAngle - pivotalAngle;
 
             // clamp delta to 45deg rotation
-            if (e.keyState.keyPressed[KeyState.SHIFT]) {
+            if (!e.keyState.keyPressed[KeyState.SHIFT]) {
                 delta = (float)(Math.round(delta / (Math.PI/4)) * (Math.PI/4));
             }
 

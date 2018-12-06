@@ -4,7 +4,9 @@ import cs.jirkamayer.gatefields.Camera;
 import cs.jirkamayer.gatefields.editor.Action;
 import cs.jirkamayer.gatefields.editor.events.Event;
 import cs.jirkamayer.gatefields.editor.events.EventType;
+import cs.jirkamayer.gatefields.editor.events.KeyState;
 import cs.jirkamayer.gatefields.editor.events.MouseState;
+import cs.jirkamayer.gatefields.math.Vector2D;
 import cs.jirkamayer.gatefields.scheme.Element;
 import cs.jirkamayer.gatefields.scheme.Scheme;
 
@@ -37,7 +39,16 @@ public class AddElementAction extends Action {
         super.eventOccurred(e);
 
         if (e.getEventType() == EventType.MOUSE_MOVE) {
-            element.transform.setPosition(camera.screenToWorld(e.mouseState.position));
+
+            Vector2D pos = camera.screenToWorld(e.mouseState.position);
+
+            // clamp delta to units halves
+            if (!e.keyState.keyPressed[KeyState.SHIFT]) {
+                pos = pos.times(2).round().divide(2);
+            }
+
+            element.transform.setPosition(pos);
+
             this.repaint();
         }
 
