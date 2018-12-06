@@ -1,23 +1,20 @@
 package cs.jirkamayer.gatefields;
 
 import cs.jirkamayer.gatefields.editor.Selection;
-import cs.jirkamayer.gatefields.math.Size2D;
 import cs.jirkamayer.gatefields.math.Vector2D;
 import cs.jirkamayer.gatefields.scheme.*;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 class MainWindow extends JFrame {
 
-    private SchemeView sceneView;
+    private SchemeView schemeView;
 
     private Scheme scheme;
     private Selection selection;
+
+    private Timer timer;
 
     MainWindow() {
         super("Gate fields");
@@ -29,24 +26,26 @@ class MainWindow extends JFrame {
 
         this.openDefaultScheme();
 
-        Timer timer = new Timer((int)(1000.0 / 10.0), (ActionEvent e) -> {
-            //System.out.println("Tick!");
+        timer = new Timer((int)(1000.0 / 10.0), (ActionEvent e) -> {
             scheme.getSimulator().simulationTick(0.1);
-            sceneView.repaint();
+            schemeView.draw();
+
+            timer.start();
         });
+        timer.setRepeats(false);
         timer.start();
     }
 
     private void setupUI() {
-        sceneView = new SchemeView(scheme, selection);
-        sceneView.setSize(1200, 700);
-        this.add(sceneView);
+        schemeView = new SchemeView(scheme, selection);
+        schemeView.setSize(1200, 700);
+        this.add(schemeView);
 
         this.setJMenuBar(
             new MainMenu(
                 scheme,
-                sceneView.getActionController(),
-                sceneView.getCamera()
+                schemeView.getActionController(),
+                schemeView.getCamera()
             )
         );
 
@@ -70,6 +69,6 @@ class MainWindow extends JFrame {
 
         scheme.getSimulator().processVertexActivations();
 
-        sceneView.repaint();
+        schemeView.repaint();
     }
 }

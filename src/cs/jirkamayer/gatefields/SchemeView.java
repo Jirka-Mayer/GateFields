@@ -6,6 +6,7 @@ import cs.jirkamayer.gatefields.editor.events.EventDispatcher;
 import cs.jirkamayer.gatefields.scheme.Scheme;
 
 import java.awt.*;
+import java.awt.image.BufferStrategy;
 
 public class SchemeView extends Canvas {
     private Camera camera;
@@ -22,7 +23,7 @@ public class SchemeView extends Canvas {
         this.scheme = scheme;
         this.selection = selection;
         this.eventDispatcher = new EventDispatcher();
-        this.actionController = new ActionController(eventDispatcher, this::repaint);
+        this.actionController = new ActionController(eventDispatcher, this::draw);
 
         this.registerAllActions();
 
@@ -53,12 +54,23 @@ public class SchemeView extends Canvas {
         actionController.registerAction(new ToggleAction(camera, scheme, selection));
     }
 
-    public void paint(Graphics g) {
+    public void draw() {
+        BufferStrategy bs = this.getBufferStrategy();
+        if (bs == null) {
+            this.createBufferStrategy(2);
+            return;
+        }
+
+        Graphics g = bs.getDrawGraphics();
+
         camera.setGraphics(g);
         camera.setDisplayDimensions(this.getWidth(), this.getHeight());
 
         camera.getRenderer().clear();
         scheme.draw(camera, selection);
         actionController.drawActions(camera);
+
+        g.dispose();
+        bs.show();
     }
 }
