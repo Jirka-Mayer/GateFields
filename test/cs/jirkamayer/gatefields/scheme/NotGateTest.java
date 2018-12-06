@@ -24,7 +24,7 @@ class NotGateTest {
         scheme.add(inputVertex);
         scheme.add(new Wire(inputVertex, notGate.inputVertex));
 
-        sim.simulationTick(NotGate.DELAY * 10);
+        sim.simulationTick(notGate.getDelay() * 10);
     }
 
     @Test
@@ -35,52 +35,52 @@ class NotGateTest {
         sim.activateVertex(inputVertex);
         assertTrue(sim.hasSignal(notGate.outputVertex));
 
-        sim.simulationTick(NotGate.DELAY * 10);
+        sim.simulationTick(notGate.getDelay() * 10);
         assertFalse(sim.hasSignal(notGate.outputVertex));
 
         sim.deactivateVertex(inputVertex);
-        sim.simulationTick(NotGate.DELAY * 10);
+        sim.simulationTick(notGate.getDelay() * 10);
         assertTrue(sim.hasSignal(notGate.outputVertex));
     }
 
     @Test
     void itIgnoresFlickerActivation() {
         sim.activateVertex(inputVertex);
-        sim.simulationTick(NotGate.DELAY / 4);
+        sim.simulationTick(notGate.getDelay() / 4);
         sim.deactivateVertex(inputVertex);
 
-        sim.simulationTick(NotGate.DELAY / 4);
+        sim.simulationTick(notGate.getDelay() / 4);
         assertTrue(sim.hasSignal(notGate.outputVertex));
 
-        sim.simulationTick(NotGate.DELAY / 4);
+        sim.simulationTick(notGate.getDelay() / 4);
         assertTrue(sim.hasSignal(notGate.outputVertex));
 
-        sim.simulationTick(NotGate.DELAY / 4);
+        sim.simulationTick(notGate.getDelay() / 4);
         assertTrue(sim.hasSignal(notGate.outputVertex));
 
-        sim.simulationTick(NotGate.DELAY / 4);
+        sim.simulationTick(notGate.getDelay() / 4);
         assertTrue(sim.hasSignal(notGate.outputVertex));
     }
 
     @Test
     void itIgnoresFlickerDeactivation() {
         sim.activateVertex(inputVertex);
-        sim.simulationTick(NotGate.DELAY * 10);
+        sim.simulationTick(notGate.getDelay() * 10);
 
         sim.deactivateVertex(inputVertex);
-        sim.simulationTick(NotGate.DELAY / 4);
+        sim.simulationTick(notGate.getDelay() / 4);
         sim.activateVertex(inputVertex);
 
-        sim.simulationTick(NotGate.DELAY / 4);
+        sim.simulationTick(notGate.getDelay() / 4);
         assertFalse(sim.hasSignal(notGate.outputVertex));
 
-        sim.simulationTick(NotGate.DELAY / 4);
+        sim.simulationTick(notGate.getDelay() / 4);
         assertFalse(sim.hasSignal(notGate.outputVertex));
 
-        sim.simulationTick(NotGate.DELAY / 4);
+        sim.simulationTick(notGate.getDelay() / 4);
         assertFalse(sim.hasSignal(notGate.outputVertex));
 
-        sim.simulationTick(NotGate.DELAY / 4);
+        sim.simulationTick(notGate.getDelay() / 4);
         assertFalse(sim.hasSignal(notGate.outputVertex));
     }
 }

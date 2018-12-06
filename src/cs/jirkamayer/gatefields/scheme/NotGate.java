@@ -6,17 +6,7 @@ import cs.jirkamayer.gatefields.editor.Selection;
 import cs.jirkamayer.gatefields.math.Vector2D;
 
 public class NotGate extends Element {
-    public static double DELAY = 0.2;
-
     public Vertex inputVertex, outputVertex;
-
-    private SimulationEvent activateOutput = (Simulator sim) -> {
-        sim.activateVertex(outputVertex);
-    };
-
-    private SimulationEvent deactivateOutput = (Simulator sim) -> {
-        sim.deactivateVertex(outputVertex);
-    };
 
     public NotGate() {
         vertices.add(inputVertex = new Vertex(new Vector2D(-1, 0), this));
@@ -29,40 +19,11 @@ public class NotGate extends Element {
     }
 
     @Override
-    public void signalsChanged(Simulator sim) {
-        SimulationQueue queue = sim.getSimulationQueue();
-
-        if (sim.hasSignal(inputVertex)) {
-            this.planDeactivation(sim, queue);
-        } else {
-            this.planActivation(sim, queue);
-        }
-    }
-
-    private void planActivation(Simulator sim, SimulationQueue queue) {
-        // activate if it's deactivated now and there is
-        // no plan of activation it in the future
-
-        if (sim.isActive(outputVertex)) {
-            // may exist - be planned earlier
-            queue.remove(this, deactivateOutput);
-        } else {
-            if (!queue.contains(this, activateOutput))
-                queue.addOrMove(DELAY, this, activateOutput);
-        }
-    }
-
-    private void planDeactivation(Simulator sim, SimulationQueue queue) {
-        // deactivate if it's activated now and there is
-        // no plan of deactivating it in the future
-
-        if (sim.isActive(outputVertex)) {
-            if (!queue.contains(this, deactivateOutput))
-                queue.addOrMove(DELAY, this, deactivateOutput);
-        } else {
-            // may exist - be planned earlier
-            queue.remove(this, activateOutput);
-        }
+    public void updateSignals(Simulator sim) {
+        if (sim.hasSignal(inputVertex))
+            sim.deactivateVertex(outputVertex);
+        else
+            sim.activateVertex(outputVertex);
     }
 
     @Override

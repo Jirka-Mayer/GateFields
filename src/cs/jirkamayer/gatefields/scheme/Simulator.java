@@ -8,12 +8,11 @@ public class Simulator {
     private Set<Vertex> activeVertices = new HashSet<>();
     private Dictionary<Vertex, Component> componentAtVertex = new Hashtable<>();
 
-    // Elements that should be examined due to signal propagation
-    private Set<Element> touchedElements = new HashSet<>();
-
     private SimulationQueue simulationQueue = new SimulationQueue();
 
-    private class Component {
+    private List<ActivationChange> activationChanges = new ArrayList<>();
+
+    private static class Component {
         public Set<Vertex> vertices = new HashSet<>();
         public int activeVertices = 0;
 
@@ -22,12 +21,18 @@ public class Simulator {
         }
     }
 
-    public Simulator(Scheme scheme) {
-        this.scheme = scheme;
+    private static class ActivationChange {
+        public Vertex vertex;
+        public boolean activity;
+
+        public ActivationChange(Vertex vertex, boolean activity) {
+            this.vertex = vertex;
+            this.activity = activity;
+        }
     }
 
-    public SimulationQueue getSimulationQueue() {
-        return simulationQueue;
+    public Simulator(Scheme scheme) {
+        this.scheme = scheme;
     }
 
     public boolean hasSignal(Vertex v) {
@@ -36,21 +41,11 @@ public class Simulator {
 
     public boolean hasSignal(Wire w) {
         // start has the same value as end
-        return this.hasSignal(w.start) && this.hasSignal(w.end);
+        return this.hasSignal(w.start);
     }
 
     public boolean isActive(Vertex v) {
         return activeVertices.contains(v);
-    }
-
-    private void touchElementsInComponent(Component c) {
-        for (Vertex v : c.vertices) {
-            if (activeVertices.contains(v))
-                continue;
-
-            if (v.isBound())
-                touchedElements.add(v.getBoundElement());
-        }
     }
 
     ////////////////////////
@@ -58,40 +53,70 @@ public class Simulator {
     ////////////////////////
 
     public void activateVertex(Vertex vertex) {
+        activationChanges.add(new ActivationChange(vertex, true));
+    }
+
+    public void deactivateVertex(Vertex vertex) {
+        activationChanges.add(new ActivationChange(vertex, false));
+    }
+
+    private void performVertexActivation(Vertex vertex) {
+        if (activeVertices.contains(vertex))
+            return;
+
         Component c = componentAtVertex.get(vertex);
 
         activeVertices.add(vertex);
         c.activeVertices++;
 
-        // was active before
-        if (c.activeVertices > 1)
-            return;
-
-        this.touchElementsInComponent(c);
+        // was not active before
+        if (c.activeVertices == 1)
+            this.planUpdateForElementsAt(c);
     }
 
-    public void deactivateVertex(Vertex vertex) {
+    private void performVertexDeactivation(Vertex vertex) {
+        if (!activeVertices.contains(vertex))
+            return;
+
         Component c = componentAtVertex.get(vertex);
 
         activeVertices.remove(vertex);
         c.activeVertices--;
 
-        // stayed active
-        if (c.isActive()) {
-            // just feed signal back to the element
-            if (vertex.isBound())
-                touchedElements.add(vertex.getBoundElement());
-
-            return;
-        }
-
-        this.touchElementsInComponent(c);
+        // stayed active -> feed signal just back to the element
+        if (c.isActive())
+            this.planUpdateForElementsAt(vertex);
+        else // else update the whole component
+            this.planUpdateForElementsAt(c);
     }
 
     public void processVertexActivations() {
-        for (Element e : touchedElements)
-            e.signalsChanged(this);
-        touchedElements.clear();
+        for (ActivationChange change : activationChanges) {
+            if (change.activity)
+                this.performVertexActivation(change.vertex);
+            else
+                this.performVertexDeactivation(change.vertex);
+        }
+        activationChanges.clear();
+    }
+
+    /////////////////////////////
+    // Element update planning //
+    /////////////////////////////
+
+    private void planUpdateForElementsAt(Vertex v) {
+        // active vertices are (except in tests) activated by the element
+        // itself, so they act as output vertices and don't care about changes there
+        if (activeVertices.contains(v))
+            return;
+
+        if (v.isBound())
+            simulationQueue.planElementUpdate(v.getBoundElement());
+    }
+
+    private void planUpdateForElementsAt(Component c) {
+        for (Vertex v : c.vertices)
+            this.planUpdateForElementsAt(v);
     }
 
     /////////////////////
@@ -99,6 +124,7 @@ public class Simulator {
     /////////////////////
 
     public void simulationTick(double elapsedTime) {
+        // if there are some forgotten activations
         this.processVertexActivations();
 
         simulationQueue.advanceTime(elapsedTime);
@@ -107,6 +133,7 @@ public class Simulator {
             simulationQueue.executeNext(this);
         }
 
+        // process any changes that occurred during the simulation step
         this.processVertexActivations();
     }
 
@@ -123,6 +150,7 @@ public class Simulator {
 
     public void vertexRemoved(Vertex v) {
         componentAtVertex.remove(v);
+        activeVertices.remove(v);
     }
 
     public void elementAdded(Element e) {
@@ -139,7 +167,7 @@ public class Simulator {
         Component j = this.joinComponents(a, b);
 
         if (a.isActive() != b.isActive())
-            this.touchElementsInComponent(j);
+            this.planUpdateForElementsAt(j);
     }
 
     public void wireRemoved(Wire w) {
@@ -167,10 +195,10 @@ public class Simulator {
         }
 
         if (a.isActive() != originalComponent.isActive())
-            this.touchElementsInComponent(a);
+            this.planUpdateForElementsAt(a);
 
         if (b.isActive() != originalComponent.isActive())
-            this.touchElementsInComponent(b);
+            this.planUpdateForElementsAt(b);
     }
 
     private Component joinComponents(Component a, Component b) {
