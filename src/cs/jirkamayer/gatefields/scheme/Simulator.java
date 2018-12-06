@@ -126,6 +126,10 @@ public class Simulator {
             this.planUpdateForElementsAt(v);
     }
 
+    public void planElementUpdate(Element e) {
+        simulationQueue.planElementUpdate(e);
+    }
+
     /////////////////////
     // Gate simulation //
     /////////////////////
