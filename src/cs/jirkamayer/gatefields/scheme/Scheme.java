@@ -171,8 +171,13 @@ public class Scheme {
         for (Vertex v : readFreeVertices)
             this.add(v);
 
-        for (Element e : readElements)
+        for (Element e : readElements) {
             this.add(e);
+
+            // undo the signal initiation - active vertices are stored explicitly
+            for (Vertex v : e.vertices)
+                simulator.deactivateVertex(v);
+        }
 
         for (Wire w : readWires)
             this.add(w);

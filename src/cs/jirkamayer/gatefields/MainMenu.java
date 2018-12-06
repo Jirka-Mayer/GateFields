@@ -2,6 +2,7 @@ package cs.jirkamayer.gatefields;
 
 import cs.jirkamayer.gatefields.editor.actions.ActionController;
 import cs.jirkamayer.gatefields.editor.actions.AddElementAction;
+import cs.jirkamayer.gatefields.math.Vector2D;
 import cs.jirkamayer.gatefields.scheme.Element;
 import cs.jirkamayer.gatefields.scheme.LogicalInput;
 import cs.jirkamayer.gatefields.scheme.NotGate;
@@ -29,10 +30,15 @@ public class MainMenu extends JMenuBar {
     private void buildFileMenu() {
         JMenu fileMenu = new JMenu("File");
 
-        JMenuItem newFile = new JMenuItem("New");
+        JMenuItem newFile = new JMenuItem("New scheme");
         newFile.addActionListener((x) -> this.newFile());
         newFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
         fileMenu.add(newFile);
+
+        JMenuItem openFile = new JMenuItem("Open file...");
+        openFile.addActionListener((x) -> this.openFile());
+        openFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
+        fileMenu.add(openFile);
 
         JMenuItem saveFile = new JMenuItem("Save file...");
         saveFile.addActionListener((x) -> this.saveFile());
@@ -60,17 +66,56 @@ public class MainMenu extends JMenuBar {
     }
 
     private void newFile() {
-        System.out.println("TODO: New file!");
+        if (JOptionPane.showConfirmDialog(null, "Forget current scheme?") != JOptionPane.OK_OPTION)
+            return;
+
+        scheme.clear();
+        scheme.add(new NotGate());
+        camera.position = Vector2D.ZERO;
+        camera.scale = 100.0f;
     }
 
     private void saveFile() {
         JFileChooser fc = new JFileChooser();
-        int returnVal = fc.showSaveDialog(this);
+        fc.setSelectedFile(new File("untitled.gfs"));
 
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
+        if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
 
-            System.out.println("TODO: Save file! To: " + file.toString());
+            if (file.isDirectory()) {
+                JOptionPane.showMessageDialog(null, "Select a file, not a folder.");
+                return;
+            }
+
+            if (file.isFile()) {
+                if (JOptionPane.showConfirmDialog(null, "Overwrite file?") != JOptionPane.OK_OPTION)
+                    return;
+            }
+
+            // perform the actual saving
+            Saver saver = new Saver(scheme, camera);
+            saver.saveTo(file);
+        }
+    }
+
+    private void openFile() {
+        JFileChooser fc = new JFileChooser();
+
+        if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+
+            if (!file.isFile()) {
+                JOptionPane.showMessageDialog(null, "File does not exist.");
+                return;
+            }
+
+            // perform the actual loading
+            scheme.clear();
+            Saver saver = new Saver(scheme, camera);
+            boolean response = saver.loadFrom(file);
+
+            if (!response)
+                JOptionPane.showMessageDialog(null, "File cannot be read.");
         }
     }
 
