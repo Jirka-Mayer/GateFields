@@ -9,7 +9,7 @@ public class LogicalInput extends Element {
     private boolean state = false;
 
     public LogicalInput() {
-        vertices.add(new Vertex(new Vector2D(1, 0), this));
+        vertices.add(new Vertex(new Vector2D(0, 0), this));
     }
 
     public boolean getState() {
@@ -35,10 +35,15 @@ public class LogicalInput extends Element {
         boolean selected = s.isSelected(this);
 
         // stem
-        r.drawWire(new Vector2D(0, 0), new Vector2D(1, 0), state, selected);
+        r.drawWire(
+            new Vector2D(-1, 0),
+            new Vector2D(0, 0),
+            sim.isActive(vertices.get(0)),
+            selected
+        );
 
         // perpendicular bar
-        r.drawWire(new Vector2D(0, 0.1f), new Vector2D(0, -0.1f), state, selected);
+        r.drawWire(new Vector2D(-1, 0.1f), new Vector2D(-1, -0.1f), state, selected);
 
         // origin
         r.drawElementOrigin(Vector2D.ZERO, selected);

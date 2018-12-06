@@ -10,6 +10,7 @@ import cs.jirkamayer.gatefields.scheme.Scheme;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
 public class MainMenu extends JMenuBar {
     private Scheme scheme;
@@ -63,7 +64,14 @@ public class MainMenu extends JMenuBar {
     }
 
     private void saveFile() {
-        System.out.println("TODO: Save file!");
+        JFileChooser fc = new JFileChooser();
+        int returnVal = fc.showSaveDialog(this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+
+            System.out.println("TODO: Save file! To: " + file.toString());
+        }
     }
 
     private void addGate(Element element) {

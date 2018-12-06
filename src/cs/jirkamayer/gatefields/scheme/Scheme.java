@@ -69,7 +69,9 @@ public class Scheme {
         if (v.isBound())
             throw new IllegalArgumentException("Cannot remove bound vertex.");
 
-        for (Wire w : wiresAtVertex.get(v))
+        // copy, to prevent ConcurrentModificationException
+        List<Wire> wiresToRemove = new ArrayList<>(wiresAtVertex.get(v));
+        for (Wire w : wiresToRemove)
             this.remove(w);
 
         vertices.remove(v);
@@ -78,7 +80,9 @@ public class Scheme {
     }
 
     private void removeBoundVertex(Vertex v) {
-        for (Wire w : wiresAtVertex.get(v))
+        // copy, to prevent ConcurrentModificationException
+        List<Wire> wiresToRemove = new ArrayList<>(wiresAtVertex.get(v));
+        for (Wire w : wiresToRemove)
             this.remove(w);
 
         vertices.remove(v);
