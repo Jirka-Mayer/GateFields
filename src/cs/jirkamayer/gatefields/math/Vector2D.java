@@ -1,5 +1,9 @@
 package cs.jirkamayer.gatefields.math;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public class Vector2D {
     public static Vector2D ZERO = new Vector2D(0.0f, 0.0f);
 
@@ -66,5 +70,20 @@ public class Vector2D {
     @Override
     public String toString() {
         return "(" + x + ", " + y + ")";
+    }
+
+    ///////////////////
+    // Serialization //
+    ///////////////////
+
+    public void writeTo(DataOutputStream stream) throws IOException {
+        stream.writeFloat(x);
+        stream.writeFloat(y);
+    }
+
+    public static Vector2D readFrom(DataInputStream stream) throws IOException {
+        float x = stream.readFloat();
+        float y = stream.readFloat();
+        return new Vector2D(x, y);
     }
 }

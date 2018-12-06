@@ -1,5 +1,9 @@
 package cs.jirkamayer.gatefields.math;
 
+import java.io.DataInput;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,5 +129,19 @@ public class Transform {
             angle = parent.transformLocalToGlobal(angle);
 
         return angle;
+    }
+
+    ///////////////////
+    // Serialization //     without parents or children!
+    ///////////////////
+
+    public void writeTo(DataOutputStream stream) throws IOException {
+        position.writeTo(stream);
+        stream.writeFloat(rotation);
+    }
+
+    public void readFrom(DataInputStream stream) throws IOException {
+        this.setLocalPosition(Vector2D.readFrom(stream));
+        this.setLocalRotation(stream.readFloat());
     }
 }

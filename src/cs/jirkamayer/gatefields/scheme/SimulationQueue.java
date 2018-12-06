@@ -30,6 +30,12 @@ public class SimulationQueue {
         currentTime += delta;
     }
 
+    public void clear() {
+        queue.clear();
+        itemForElement = new Hashtable<>();
+        currentTime = 0.0;
+    }
+
     /**
      * Plan a signal update for an element
      */

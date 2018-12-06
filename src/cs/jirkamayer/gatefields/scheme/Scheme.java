@@ -2,7 +2,12 @@ package cs.jirkamayer.gatefields.scheme;
 
 import cs.jirkamayer.gatefields.Camera;
 import cs.jirkamayer.gatefields.editor.Selection;
+import cs.jirkamayer.gatefields.math.Vector2D;
 
+import java.io.DataInput;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.*;
 
 public class Scheme {
@@ -136,5 +141,42 @@ public class Scheme {
 
         for (Vertex v : vertices)
             v.draw(c, s, simulator);
+    }
+
+    public void clear() {
+        vertices.clear();
+        elements.clear();
+        wires.clear();
+        wiresAtVertex = new Hashtable<>();
+        simulator.clear();
+    }
+
+    ///////////////////
+    // Serialization //
+    ///////////////////
+
+    public void writeTo(DataOutputStream stream) throws IOException {
+        this.writeFreeVertices(stream);
+    }
+
+    public void readFrom(DataInputStream stream) throws IOException {
+        this.readFreeVertices(stream);
+    }
+
+    // Implementation //
+
+    private void writeFreeVertices(DataOutputStream stream) throws IOException {
+        stream.writeInt(vertices.size());
+        for (Vertex v : vertices)
+            v.transform.writeTo(stream);
+    }
+
+    private void readFreeVertices(DataInputStream stream) throws IOException {
+        int count = stream.readInt();
+        for (int i = 0; i < count; i++) {
+            Vertex v = new Vertex(Vector2D.ZERO);
+            v.transform.readFrom(stream);
+            vertices.add(v);
+        }
     }
 }

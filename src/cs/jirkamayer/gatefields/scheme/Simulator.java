@@ -48,6 +48,13 @@ public class Simulator {
         return activeVertices.contains(v);
     }
 
+    public void clear() {
+        activeVertices.clear();
+        componentAtVertex = new Hashtable<>();
+        simulationQueue.clear();
+        activationChanges.clear();
+    }
+
     ////////////////////////
     // Vertex activations //
     ////////////////////////

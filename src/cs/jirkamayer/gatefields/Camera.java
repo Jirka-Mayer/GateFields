@@ -5,6 +5,9 @@ import cs.jirkamayer.gatefields.math.Transform;
 import cs.jirkamayer.gatefields.math.Vector2D;
 
 import java.awt.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * Adapter between the app drawing logic and the underlying framework
@@ -158,5 +161,19 @@ public class Camera {
 
         g.setColor(color);
         g.fillOval((int)pos.x, (int)pos.y, size, size);
+    }
+
+    ///////////////////
+    // Serialization //
+    ///////////////////
+
+    public void writeTo(DataOutputStream stream) throws IOException {
+        position.writeTo(stream);
+        stream.writeFloat(scale);
+    }
+
+    public void readFrom(DataInputStream stream) throws IOException {
+        position = Vector2D.readFrom(stream);
+        scale = stream.readFloat();
     }
 }
