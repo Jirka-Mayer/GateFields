@@ -5,6 +5,7 @@ import cs.jirkamayer.gatefields.math.Transform;
 import cs.jirkamayer.gatefields.math.Vector2D;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -171,6 +172,26 @@ public class Camera {
         g.setColor(color);
         g.setFont(new Font("Monospaced", Font.PLAIN, (int)height));
         g.drawString(text, pos.x, pos.y);
+    }
+
+    public void drawScreenTextCentered(String text, Vector2D pos, Color color, float height) {
+        g.setColor(color);
+        g.setFont(new Font("Monospaced", Font.PLAIN, (int)height));
+        FontMetrics metrics = g.getFontMetrics();
+        g.drawString(
+            text,
+            pos.x - metrics.stringWidth(text) / 2.0f,
+            pos.y - metrics.getHeight() / 2.0f + metrics.getAscent()
+        );
+    }
+
+    public void drawTextCentered(String text, Vector2D pos, Color color, float height) {
+        this.drawScreenTextCentered(
+            text,
+            this.localToScreen(pos),
+            color,
+            this.localToScreen(height)
+        );
     }
 
     ///////////////////

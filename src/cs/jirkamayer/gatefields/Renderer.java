@@ -9,4 +9,5 @@ public interface Renderer {
     void drawElementLine(Vector2D a, Vector2D b, boolean selected);
     void drawElementCircle(Vector2D center, boolean selected);
     void drawElementOrigin(Vector2D center, boolean selected);
+    void drawLabel(String text, Vector2D center);
 }

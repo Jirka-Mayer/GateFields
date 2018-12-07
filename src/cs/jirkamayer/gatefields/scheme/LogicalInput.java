@@ -5,6 +5,8 @@ import cs.jirkamayer.gatefields.Renderer;
 import cs.jirkamayer.gatefields.editor.Selection;
 import cs.jirkamayer.gatefields.math.Vector2D;
 
+import java.awt.*;
+
 public class LogicalInput extends Element {
     private boolean state = false;
 
@@ -47,5 +49,8 @@ public class LogicalInput extends Element {
 
         // origin
         r.drawElementOrigin(Vector2D.ZERO, selected);
+
+        // label
+        r.drawLabel(state ? "1" : "0", new Vector2D(-1.5f, 0));
     }
 }

@@ -57,4 +57,9 @@ public class DefaultRenderer implements Renderer {
         if (selected)
             camera.fillCircle(center, 0.1f, Color.YELLOW);
     }
+
+    @Override
+    public void drawLabel(String text, Vector2D center) {
+        camera.drawTextCentered(text, center, Color.WHITE, 0.5f);
+    }
 }
