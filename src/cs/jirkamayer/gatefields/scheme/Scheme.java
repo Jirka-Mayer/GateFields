@@ -156,10 +156,10 @@ public class Scheme {
     ///////////////////
 
     public void writeTo(DataOutputStream stream) throws IOException {
-        this.writeFreeVertices(stream);
+        List<Vertex> writtenFreeVertices = this.writeFreeVertices(stream);
         this.writeElements(stream);
-        this.writeWires(stream);
-        this.writeActiveVertices(stream);
+        this.writeWires(stream, writtenFreeVertices);
+        this.writeActiveVertices(stream, writtenFreeVertices);
     }
 
     public void readFrom(DataInputStream stream) throws IOException {
@@ -193,16 +193,19 @@ public class Scheme {
 
     // Implementation //
 
-    private void writeFreeVertices(DataOutputStream stream) throws IOException {
-        int count = 0;
+    private List<Vertex> writeFreeVertices(DataOutputStream stream) throws IOException {
+        List<Vertex> writtenFreeVertices = new ArrayList<>();
+
         for (Vertex v : vertices)
             if (!v.isBound())
-                count++;
+                writtenFreeVertices.add(v);
 
-        stream.writeInt(count);
+        stream.writeInt(writtenFreeVertices.size());
         for (Vertex v : vertices)
             if (!v.isBound())
                 v.transform.writeTo(stream);
+
+        return writtenFreeVertices;
     }
 
     private List<Vertex> readFreeVertices(DataInputStream stream) throws IOException {
@@ -231,15 +234,19 @@ public class Scheme {
         return readElements;
     }
 
-    private void writeWires(DataOutputStream stream) throws IOException {
+    private void writeWires(DataOutputStream stream, List<Vertex> writtenFreeVertices) throws IOException {
         stream.writeInt(wires.size());
         for (Wire w : wires) {
-            this.writeVertexReference(w.start, stream);
-            this.writeVertexReference(w.end, stream);
+            this.writeVertexReference(w.start, writtenFreeVertices, stream);
+            this.writeVertexReference(w.end, writtenFreeVertices, stream);
         }
     }
 
-    private void writeVertexReference(Vertex v, DataOutputStream stream) throws IOException {
+    private void writeVertexReference(
+        Vertex v,
+        List<Vertex> writtenFreeVertices,
+        DataOutputStream stream
+    ) throws IOException {
         if (v.isBound()) {
             Element e = v.getBoundElement();
 
@@ -248,7 +255,7 @@ public class Scheme {
             stream.writeInt(e.vertices.indexOf(v));
         } else {
             stream.writeInt(0);
-            stream.writeInt(vertices.indexOf(v)); // BUG: index in free vertices only!
+            stream.writeInt(writtenFreeVertices.indexOf(v));
         }
     }
 
@@ -285,7 +292,10 @@ public class Scheme {
         }
     }
 
-    private void writeActiveVertices(DataOutputStream stream) throws IOException {
+    private void writeActiveVertices(
+        DataOutputStream stream,
+        List<Vertex> writtenFreeVertices
+    ) throws IOException {
         int count = 0;
         for (Vertex v : vertices)
             if (simulator.isActive(v))
@@ -294,7 +304,7 @@ public class Scheme {
         stream.writeInt(count);
         for (Vertex v : vertices)
             if (simulator.isActive(v))
-                this.writeVertexReference(v, stream);
+                this.writeVertexReference(v, writtenFreeVertices, stream);
     }
 
     private List<Vertex> readActiveVertices(
