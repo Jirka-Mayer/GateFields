@@ -10,19 +10,27 @@ public class SimulationQueue {
     private Dictionary<Element, Item> itemForElement = new Hashtable<>();
 
     private double currentTime = 0.0;
+    private long nextId = 0;
 
     private static class Item implements Comparable<Item> {
         public double time;
+        public long id;
         public Element element;
 
-        public Item(double time, Element element) {
+        public Item(double time, long id, Element element) {
             this.time = time;
+            this.id = id;
             this.element = element;
         }
 
         @Override
         public int compareTo(Item o) {
-            return Double.compare(time, o.time);
+            int c = Double.compare(time, o.time);
+
+            if (c != 0)
+                return c;
+
+            return Long.compare(id, o.id);
         }
     }
 
@@ -43,7 +51,7 @@ public class SimulationQueue {
         Item item = itemForElement.get(element);
 
         if (item == null) { // add
-            item = new Item(currentTime + element.getDelay(), element);
+            item = new Item(currentTime + element.getDelay(), nextId++, element);
             queue.add(item);
             itemForElement.put(element, item);
         } else { // move

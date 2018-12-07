@@ -142,10 +142,8 @@ public class Simulator {
 
         while (simulationQueue.hasItemToExecute()) {
             simulationQueue.executeNext(this);
+            this.processVertexActivations();
         }
-
-        // process any changes that occurred during the simulation step
-        this.processVertexActivations();
     }
 
     ////////////////////
