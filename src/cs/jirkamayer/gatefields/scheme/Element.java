@@ -55,6 +55,7 @@ public abstract class Element {
         if (e instanceof NorGate) return 7;
         if (e instanceof SRLatch) return 8;
         if (e instanceof DLatch) return 9;
+        if (e instanceof BufferGate) return 10;
         throw new IllegalArgumentException("Provided element is not known.");
     }
 
@@ -68,6 +69,7 @@ public abstract class Element {
         if (id == 7) return new NorGate();
         if (id == 8) return new SRLatch();
         if (id == 9) return new DLatch();
+        if (id == 10) return new BufferGate();
         throw new IllegalArgumentException("Provided id is not known.");
     }
 

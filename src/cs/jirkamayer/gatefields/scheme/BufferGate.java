@@ -5,25 +5,25 @@ import cs.jirkamayer.gatefields.Renderer;
 import cs.jirkamayer.gatefields.editor.Selection;
 import cs.jirkamayer.gatefields.math.Vector2D;
 
-public class NotGate extends Element {
+public class BufferGate extends Element {
     public Vertex inputVertex, outputVertex;
 
-    public NotGate() {
+    public BufferGate() {
         vertices.add(inputVertex = new Vertex(new Vector2D(-0.5f, 0), this));
         vertices.add(outputVertex = new Vertex(new Vector2D(1.5f, 0), this));
     }
 
     @Override
     public void initializeSignals(Simulator sim) {
-        sim.activateVertex(outputVertex);
+        // nothing
     }
 
     @Override
     public void updateSignals(Simulator sim) {
         if (sim.hasSignal(inputVertex))
-            sim.deactivateVertex(outputVertex);
-        else
             sim.activateVertex(outputVertex);
+        else
+            sim.deactivateVertex(outputVertex);
     }
 
     @Override
@@ -52,9 +52,6 @@ public class NotGate extends Element {
         r.drawElementLine(new Vector2D(0.0f, -0.6f), new Vector2D(0.0f, 0.6f), selected);
         r.drawElementLine(new Vector2D(0.0f, -0.6f), new Vector2D(0.8f, 0), selected);
         r.drawElementLine(new Vector2D(0.0f, 0.6f), new Vector2D(0.8f, 0), selected);
-
-        // circle
-        r.drawElementCircle(new Vector2D(0.9f, 0), selected);
 
         // origin
         r.drawElementOrigin(Vector2D.ZERO, selected);

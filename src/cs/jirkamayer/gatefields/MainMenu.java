@@ -61,6 +61,11 @@ public class MainMenu extends JMenuBar {
         notGate.setMnemonic('N');
         addMenu.add(notGate);
 
+        JMenuItem bufferGate = new JMenuItem("Buffer");
+        bufferGate.addActionListener((x) -> this.addGate(new BufferGate()));
+        bufferGate.setMnemonic('B');
+        addMenu.add(bufferGate);
+
         JMenuItem andGate = new JMenuItem("AND gate");
         andGate.addActionListener((x) -> this.addGate(new AndGate()));
         andGate.setMnemonic('A');
