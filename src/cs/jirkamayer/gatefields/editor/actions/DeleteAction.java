@@ -1,5 +1,6 @@
 package cs.jirkamayer.gatefields.editor.actions;
 
+import cs.jirkamayer.gatefields.Camera;
 import cs.jirkamayer.gatefields.editor.Action;
 import cs.jirkamayer.gatefields.editor.Selection;
 import cs.jirkamayer.gatefields.editor.events.Event;
@@ -48,5 +49,5 @@ public class DeleteAction extends Action {
     }
 
     @Override
-    protected void repaint() {}
+    public void drawAction(Camera camera) {}
 }

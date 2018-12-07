@@ -82,5 +82,5 @@ public class ToggleAction extends Action {
     }
 
     @Override
-    protected void repaint() {}
+    public void drawAction(Camera camera) {}
 }

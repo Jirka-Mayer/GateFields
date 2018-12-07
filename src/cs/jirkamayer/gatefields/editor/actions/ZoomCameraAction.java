@@ -38,5 +38,5 @@ public class ZoomCameraAction extends Action {
     }
 
     @Override
-    protected void repaint() {}
+    public void drawAction(Camera camera) {}
 }
