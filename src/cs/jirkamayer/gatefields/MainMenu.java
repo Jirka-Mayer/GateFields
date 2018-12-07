@@ -3,10 +3,7 @@ package cs.jirkamayer.gatefields;
 import cs.jirkamayer.gatefields.editor.actions.ActionController;
 import cs.jirkamayer.gatefields.editor.actions.AddElementAction;
 import cs.jirkamayer.gatefields.math.Vector2D;
-import cs.jirkamayer.gatefields.scheme.Element;
-import cs.jirkamayer.gatefields.scheme.LogicalInput;
-import cs.jirkamayer.gatefields.scheme.NotGate;
-import cs.jirkamayer.gatefields.scheme.Scheme;
+import cs.jirkamayer.gatefields.scheme.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -63,6 +60,11 @@ public class MainMenu extends JMenuBar {
         notGate.addActionListener((x) -> this.addGate(new NotGate()));
         notGate.setMnemonic('N');
         addMenu.add(notGate);
+
+        JMenuItem andGate = new JMenuItem("AND gate");
+        andGate.addActionListener((x) -> this.addGate(new AndGate()));
+        andGate.setMnemonic('A');
+        addMenu.add(andGate);
 
         this.add(addMenu);
     }

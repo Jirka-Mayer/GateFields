@@ -30,7 +30,6 @@ public class NotGate extends Element {
     public void draw(Camera c, Selection s, Simulator sim) {
         Renderer r = c.getRenderer();
         c.setTransform(transform);
-
         boolean selected = s.isSelected(this);
 
         // stem
@@ -42,20 +41,20 @@ public class NotGate extends Element {
         );
 
         // triangle
-        r.drawElementLine(new Vector2D(0, -0.8f), new Vector2D(0, 0.8f), selected);
-        r.drawElementLine(new Vector2D(0, -0.8f), new Vector2D(1, 0), selected);
-        r.drawElementLine(new Vector2D(0, 0.8f), new Vector2D(1, 0), selected);
+        r.drawElementLine(new Vector2D(0.0f, -0.6f), new Vector2D(0.0f, 0.6f), selected);
+        r.drawElementLine(new Vector2D(0.0f, -0.6f), new Vector2D(0.8f, 0), selected);
+        r.drawElementLine(new Vector2D(0.0f, 0.6f), new Vector2D(0.8f, 0), selected);
 
         // peak
         r.drawWire(
-            new Vector2D(1, 0),
+            new Vector2D(0.8f, 0),
             new Vector2D(2, 0),
             sim.hasSignal(outputVertex),
             selected
         );
 
         // circle
-        r.drawElementCircle(new Vector2D(1.1f, 0), selected);
+        r.drawElementCircle(new Vector2D(0.9f, 0), selected);
 
         // origin
         r.drawElementOrigin(Vector2D.ZERO, selected);
