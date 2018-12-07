@@ -123,4 +123,9 @@ public class MoveAction extends Action {
         for (int i = 0; i < originalElementPositions.length; i++)
             elements.get(i).transform.setPosition(originalElementPositions[i].plus(delta));
     }
+
+    @Override
+    public String getName() {
+        return "Move";
+    }
 }

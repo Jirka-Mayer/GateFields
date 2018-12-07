@@ -83,4 +83,9 @@ public class ExtrudeWireAction extends Action {
 
         super.actionCancelled();
     }
+
+    @Override
+    public String getName() {
+        return "Extrude";
+    }
 }

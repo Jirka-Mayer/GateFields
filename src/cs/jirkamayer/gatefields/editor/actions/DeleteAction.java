@@ -46,4 +46,7 @@ public class DeleteAction extends Action {
         this.repaint();
         this.deactivate();
     }
+
+    @Override
+    protected void repaint() {}
 }

@@ -36,4 +36,7 @@ public class ZoomCameraAction extends Action {
 
         this.deactivate();
     }
+
+    @Override
+    protected void repaint() {}
 }

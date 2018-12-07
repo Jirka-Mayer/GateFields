@@ -63,4 +63,9 @@ public class AddElementAction extends Action {
 
         super.actionCancelled();
     }
+
+    @Override
+    public String getName() {
+        return "Add element";
+    }
 }

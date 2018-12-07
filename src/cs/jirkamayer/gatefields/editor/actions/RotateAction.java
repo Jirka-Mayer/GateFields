@@ -116,6 +116,8 @@ public class RotateAction extends Action {
 
     @Override
     public void drawAction(Camera camera) {
+        super.drawAction(camera);
+
         if (mouseOnDown == null || mousePosition == null)
             return;
 
@@ -154,5 +156,10 @@ public class RotateAction extends Action {
                 originalElementRotations[i] + delta
             );
         }
+    }
+
+    @Override
+    public String getName() {
+        return "Rotate";
     }
 }

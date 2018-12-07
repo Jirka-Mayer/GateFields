@@ -51,4 +51,7 @@ public class AddWireAction extends Action {
         this.repaint();
         this.deactivate();
     }
+
+    @Override
+    protected void repaint() {}
 }

@@ -48,4 +48,9 @@ public class MoveCameraAction extends Action {
             this.deactivate();
         }
     }
+
+    @Override
+    public String getName() {
+        return "Move camera";
+    }
 }

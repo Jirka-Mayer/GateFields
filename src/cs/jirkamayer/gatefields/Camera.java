@@ -42,6 +42,10 @@ public class Camera {
         displayWidth = width;
     }
 
+    public Size2D getDisplayDimensions() {
+        return new Size2D(displayWidth, displayHeight);
+    }
+
     public void setTransform(Transform t) {
         transform = t;
     }
@@ -161,6 +165,12 @@ public class Camera {
 
         g.setColor(color);
         g.fillOval((int)pos.x, (int)pos.y, size, size);
+    }
+
+    public void drawScreenText(String text, Vector2D pos, Color color, float height) {
+        g.setColor(color);
+        g.setFont(new Font("Monospaced", Font.PLAIN, (int)height));
+        g.drawString(text, pos.x, pos.y);
     }
 
     ///////////////////

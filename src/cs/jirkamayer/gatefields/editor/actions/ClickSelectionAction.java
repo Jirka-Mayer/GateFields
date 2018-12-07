@@ -92,4 +92,7 @@ public class ClickSelectionAction extends Action {
         if (!shift)
             selection.deselectAll();
     }
+
+    @Override
+    protected void repaint() {}
 }

@@ -4,6 +4,10 @@ import cs.jirkamayer.gatefields.Camera;
 import cs.jirkamayer.gatefields.editor.events.Event;
 import cs.jirkamayer.gatefields.editor.events.EventType;
 import cs.jirkamayer.gatefields.editor.events.KeyState;
+import cs.jirkamayer.gatefields.math.Size2D;
+import cs.jirkamayer.gatefields.math.Vector2D;
+
+import java.awt.*;
 
 public abstract class Action {
 
@@ -74,7 +78,17 @@ public abstract class Action {
             repaintCallback.repaint();
     }
 
+    public String getName() {
+        return "<UnnamedAction>";
+    }
+
     public void drawAction(Camera camera) {
-        // override to draw custom UI when action is active
+        Size2D display = camera.getDisplayDimensions();
+        camera.drawScreenText(
+            this.getName(),
+            new Vector2D(10, display.h - 10),
+            Color.LIGHT_GRAY,
+            20
+        );
     }
 }

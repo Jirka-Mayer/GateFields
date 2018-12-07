@@ -80,4 +80,7 @@ public class ToggleAction extends Action {
         this.deactivate();
         this.repaint();
     }
+
+    @Override
+    protected void repaint() {}
 }
