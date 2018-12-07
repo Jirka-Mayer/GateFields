@@ -59,6 +59,11 @@ public class Camera {
         this.renderer = renderer;
     }
 
+    public void reset() {
+        position = Vector2D.ZERO;
+        scale = 100.0f;
+    }
+
     /////////////////////
     // Transformations //
     /////////////////////

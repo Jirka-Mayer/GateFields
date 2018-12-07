@@ -116,9 +116,8 @@ public class MainMenu extends JMenuBar {
         mainWindow.stopSimulation();
 
         scheme.clear();
-        scheme.add(new NotGate());
-        camera.position = Vector2D.ZERO;
-        camera.scale = 100.0f;
+        scheme.add(new LogicalInput());
+        camera.reset();
 
         mainWindow.startSimulation();
     }
