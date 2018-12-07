@@ -76,6 +76,11 @@ public class MainMenu extends JMenuBar {
         xorGate.setMnemonic('X');
         addMenu.add(xorGate);
 
+        JMenuItem nandGate = new JMenuItem("NAND gate");
+        nandGate.addActionListener((x) -> this.addGate(new NandGate()));
+        nandGate.setMnemonic('D');
+        addMenu.add(nandGate);
+
         this.add(addMenu);
     }
 
