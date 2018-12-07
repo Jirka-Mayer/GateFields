@@ -86,6 +86,11 @@ public class MainMenu extends JMenuBar {
         norGate.setMnemonic('R');
         addMenu.add(norGate);
 
+        JMenuItem srLatch = new JMenuItem("SR latch");
+        srLatch.addActionListener((x) -> this.addGate(new SRLatch()));
+        srLatch.setMnemonic('S');
+        addMenu.add(srLatch);
+
         this.add(addMenu);
     }
 

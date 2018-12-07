@@ -174,7 +174,7 @@ public class Camera {
         g.drawString(text, pos.x, pos.y);
     }
 
-    public void drawScreenTextCentered(String text, Vector2D pos, Color color, float height) {
+    public void drawScreenTextCentered(String text, Vector2D pos, Color color, float height, boolean bar) {
         g.setColor(color);
         g.setFont(new Font("Monospaced", Font.PLAIN, (int)height));
         FontMetrics metrics = g.getFontMetrics();
@@ -183,14 +183,25 @@ public class Camera {
             pos.x - metrics.stringWidth(text) / 2.0f,
             pos.y - metrics.getHeight() / 2.0f + metrics.getAscent()
         );
+
+        if (bar) {
+            g.setStroke(new BasicStroke(height / 10f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            g.drawLine(
+                (int)(pos.x - metrics.stringWidth(text) / 2.0f),
+                (int)(pos.y + metrics.getHeight() / 2.0f - metrics.getAscent() - height * 0.3),
+                (int)(pos.x + metrics.stringWidth(text) / 2.0f),
+                (int)(pos.y + metrics.getHeight() / 2.0f - metrics.getAscent() - height * 0.3)
+            );
+        }
     }
 
-    public void drawTextCentered(String text, Vector2D pos, Color color, float height) {
+    public void drawTextCentered(String text, Vector2D pos, Color color, float height, boolean bar) {
         this.drawScreenTextCentered(
             text,
             this.localToScreen(pos),
             color,
-            this.localToScreen(height)
+            this.localToScreen(height),
+            bar
         );
     }
 

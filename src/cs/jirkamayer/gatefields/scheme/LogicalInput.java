@@ -6,6 +6,9 @@ import cs.jirkamayer.gatefields.editor.Selection;
 import cs.jirkamayer.gatefields.math.Vector2D;
 
 import java.awt.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class LogicalInput extends Element {
     private boolean state = false;
@@ -52,5 +55,15 @@ public class LogicalInput extends Element {
 
         // label
         r.drawLabel(state ? "1" : "0", new Vector2D(-1.5f, 0));
+    }
+
+    @Override
+    protected void writeCustomPayload(DataOutputStream stream) throws IOException {
+        stream.writeBoolean(state);
+    }
+
+    @Override
+    protected void readCustomPayload(DataInputStream stream) throws IOException {
+        state = stream.readBoolean();
     }
 }

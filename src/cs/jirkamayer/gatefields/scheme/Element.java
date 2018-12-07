@@ -1,5 +1,6 @@
 package cs.jirkamayer.gatefields.scheme;
 
+import com.sun.org.apache.xpath.internal.operations.And;
 import cs.jirkamayer.gatefields.Camera;
 import cs.jirkamayer.gatefields.editor.Selection;
 import cs.jirkamayer.gatefields.math.Transform;
@@ -47,12 +48,24 @@ public abstract class Element {
     public static int getElementId(Element e) {
         if (e instanceof NotGate) return 1;
         if (e instanceof LogicalInput) return 2;
+        if (e instanceof AndGate) return 3;
+        if (e instanceof OrGate) return 4;
+        if (e instanceof XorGate) return 5;
+        if (e instanceof NandGate) return 6;
+        if (e instanceof NorGate) return 7;
+        if (e instanceof SRLatch) return 8;
         throw new IllegalArgumentException("Provided element is not known.");
     }
 
     public static Element createElementFromId(int id) {
         if (id == 1) return new NotGate();
         if (id == 2) return new LogicalInput();
+        if (id == 3) return new AndGate();
+        if (id == 4) return new OrGate();
+        if (id == 5) return new XorGate();
+        if (id == 6) return new NandGate();
+        if (id == 7) return new NorGate();
+        if (id == 8) return new SRLatch();
         throw new IllegalArgumentException("Provided id is not known.");
     }
 

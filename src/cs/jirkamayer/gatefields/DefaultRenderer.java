@@ -60,6 +60,11 @@ public class DefaultRenderer implements Renderer {
 
     @Override
     public void drawLabel(String text, Vector2D center) {
-        camera.drawTextCentered(text, center, Color.WHITE, 0.5f);
+        camera.drawTextCentered(text, center, Color.WHITE, 0.5f, false);
+    }
+
+    @Override
+    public void drawBarLabel(String text, Vector2D center) {
+        camera.drawTextCentered(text, center, Color.WHITE, 0.5f, true);
     }
 }

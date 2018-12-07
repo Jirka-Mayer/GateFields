@@ -10,4 +10,5 @@ public interface Renderer {
     void drawElementCircle(Vector2D center, boolean selected);
     void drawElementOrigin(Vector2D center, boolean selected);
     void drawLabel(String text, Vector2D center);
+    void drawBarLabel(String text, Vector2D center);
 }

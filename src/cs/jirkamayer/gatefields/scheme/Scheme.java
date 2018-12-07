@@ -248,7 +248,7 @@ public class Scheme {
             stream.writeInt(e.vertices.indexOf(v));
         } else {
             stream.writeInt(0);
-            stream.writeInt(vertices.indexOf(v));
+            stream.writeInt(vertices.indexOf(v)); // BUG: index in free vertices only!
         }
     }
 
