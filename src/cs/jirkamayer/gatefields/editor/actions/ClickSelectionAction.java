@@ -65,7 +65,7 @@ public class ClickSelectionAction extends Action {
             }
         }
 
-        // invert vertex selection if it's close enough
+        // invert vertex selection if it'j close enough
         if (closestDistance <= SELECTION_DISTANCE_PX) {
             this.clickedOnVertex(closest, e.keyState.keyPressed[KeyState.SHIFT]);
         } else {

@@ -101,6 +101,11 @@ public class MainMenu extends JMenuBar {
         dLatch.setMnemonic('L');
         addMenu.add(dLatch);
 
+        JMenuItem jkLatch = new JMenuItem("JK latch");
+        jkLatch.addActionListener((x) -> this.addGate(new JKLatch()));
+        jkLatch.setMnemonic('J');
+        addMenu.add(jkLatch);
+
         this.add(addMenu);
     }
 

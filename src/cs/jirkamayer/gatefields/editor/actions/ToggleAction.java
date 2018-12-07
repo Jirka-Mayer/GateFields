@@ -67,7 +67,7 @@ public class ToggleAction extends Action {
             return;
         }
 
-        // invert vertex selection if it's close enough
+        // invert vertex selection if it'j close enough
         if (closestDistance > TOGGLE_DISTANCE_PX) {
             this.deactivate();
             return;

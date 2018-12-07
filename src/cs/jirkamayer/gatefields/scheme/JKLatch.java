@@ -9,16 +9,17 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class DLatch extends Element {
-    public Vertex d, clk, q, nq;
+public class JKLatch extends Element {
+    public Vertex j, k, clk, q, nq;
     private boolean state = false; // = Q
 
     // to detect rising edges
     private boolean prevClkSignal = false;
 
-    public DLatch() {
-        vertices.add(d = new Vertex(new Vector2D(-1.5f, -1), this));
-        vertices.add(clk = new Vertex(new Vector2D(-1.5f, 1), this));
+    public JKLatch() {
+        vertices.add(j = new Vertex(new Vector2D(-1.5f, -1), this));
+        vertices.add(k = new Vertex(new Vector2D(-1.5f, 1), this));
+        vertices.add(clk = new Vertex(new Vector2D(-1.5f, 0), this));
         vertices.add(q = new Vertex(new Vector2D(1.5f, -1), this));
         vertices.add(nq = new Vertex(new Vector2D(1.5f, 1), this));
     }
@@ -30,15 +31,17 @@ public class DLatch extends Element {
 
     @Override
     public void updateSignals(Simulator sim) {
-        /*
-            NOTE:
-            I sadly cannot implement shift register with only D latches
-            I have to delay the signal using buffers. Then it works.
-         */
-
         // catch CLK rising edge
-        if (sim.hasSignal(clk) && !prevClkSignal)
-            state = sim.hasSignal(d);
+        if (sim.hasSignal(clk) && !prevClkSignal) {
+            if (sim.hasSignal(j) && !sim.hasSignal(k)) // set
+                state = true;
+
+            if (!sim.hasSignal(j) && sim.hasSignal(k)) // reset
+                state = false;
+
+            if (sim.hasSignal(j) && sim.hasSignal(k)) // toggle
+                state = !state;
+        }
 
         if (state) {
             sim.activateVertex(q);
@@ -60,10 +63,14 @@ public class DLatch extends Element {
         // wires
         r.drawWire(
             new Vector2D(-1.5f, -1), new Vector2D(-1, -1),
-            sim.hasSignal(this.d), selected
+            sim.hasSignal(this.j), selected
         );
         r.drawWire(
             new Vector2D(-1.5f, 1), new Vector2D(-1, 1),
+            sim.hasSignal(this.k), selected
+        );
+        r.drawWire(
+            new Vector2D(-1.5f, 0), new Vector2D(-1, 0),
             sim.hasSignal(this.clk), selected
         );
         r.drawWire(
@@ -82,11 +89,12 @@ public class DLatch extends Element {
         r.drawElementLine(new Vector2D(1, -1.5f), new Vector2D(1, 1.5f), selected);
 
         // clk symbol
-        r.drawElementLine(new Vector2D(-1, 0.7f), new Vector2D(-0.7f, 1), selected);
-        r.drawElementLine(new Vector2D(-1, 1.3f), new Vector2D(-0.7f, 1), selected);
+        r.drawElementLine(new Vector2D(-1, -0.3f), new Vector2D(-0.7f, 0), selected);
+        r.drawElementLine(new Vector2D(-1, 0.3f), new Vector2D(-0.7f, 0), selected);
 
         // labels
-        r.drawLabel("D", new Vector2D(-0.6f, -1f));
+        r.drawLabel("J", new Vector2D(-0.6f, -1f));
+        r.drawLabel("K", new Vector2D(-0.6f, 1f));
         r.drawLabel("Q", new Vector2D(0.6f, -1f));
         r.drawBarLabel("Q", new Vector2D(0.6f, 1f));
 

@@ -1,6 +1,5 @@
 package cs.jirkamayer.gatefields.scheme;
 
-import com.sun.org.apache.xpath.internal.operations.And;
 import cs.jirkamayer.gatefields.Camera;
 import cs.jirkamayer.gatefields.editor.Selection;
 import cs.jirkamayer.gatefields.math.Transform;
@@ -56,6 +55,7 @@ public abstract class Element {
         if (e instanceof SRLatch) return 8;
         if (e instanceof DLatch) return 9;
         if (e instanceof BufferGate) return 10;
+        if (e instanceof JKLatch) return 11;
         throw new IllegalArgumentException("Provided element is not known.");
     }
 
@@ -70,6 +70,7 @@ public abstract class Element {
         if (id == 8) return new SRLatch();
         if (id == 9) return new DLatch();
         if (id == 10) return new BufferGate();
+        if (id == 11) return new JKLatch();
         throw new IllegalArgumentException("Provided id is not known.");
     }
 
