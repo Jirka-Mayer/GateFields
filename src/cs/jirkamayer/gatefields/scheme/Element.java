@@ -33,7 +33,7 @@ public abstract class Element {
      * (delay between signal change and call to the updateSignals method)
      */
     public double getDelay() {
-        return 0.2;
+        return 0.001; // 1ms (not real, but at least manageable, real are ~10ns and less)
     }
 
     public abstract void draw(Camera c, Selection s, Simulator sim);

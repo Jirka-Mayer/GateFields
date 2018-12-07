@@ -17,8 +17,10 @@ public class MainMenu extends JMenuBar {
     private Scheme scheme;
     private ActionController actionController;
     private Camera camera;
+    private MainWindow mainWindow;
 
-    public MainMenu(Scheme scheme, ActionController actionController, Camera camera) {
+    public MainMenu(Scheme scheme, ActionController actionController, Camera camera, MainWindow mainWindow) {
+        this.mainWindow = mainWindow;
         this.scheme = scheme;
         this.actionController = actionController;
         this.camera = camera;
@@ -69,10 +71,14 @@ public class MainMenu extends JMenuBar {
         if (JOptionPane.showConfirmDialog(null, "Forget current scheme?") != JOptionPane.OK_OPTION)
             return;
 
+        mainWindow.stopSimulation();
+
         scheme.clear();
         scheme.add(new NotGate());
         camera.position = Vector2D.ZERO;
         camera.scale = 100.0f;
+
+        mainWindow.startSimulation();
     }
 
     private void saveFile() {
@@ -93,8 +99,10 @@ public class MainMenu extends JMenuBar {
             }
 
             // perform the actual saving
+            mainWindow.stopSimulation();
             Saver saver = new Saver(scheme, camera);
             saver.saveTo(file);
+            mainWindow.startSimulation();
         }
     }
 
@@ -110,9 +118,11 @@ public class MainMenu extends JMenuBar {
             }
 
             // perform the actual loading
+            mainWindow.stopSimulation();
             scheme.clear();
             Saver saver = new Saver(scheme, camera);
             boolean response = saver.loadFrom(file);
+            mainWindow.startSimulation();
 
             if (!response)
                 JOptionPane.showMessageDialog(null, "File cannot be read.");

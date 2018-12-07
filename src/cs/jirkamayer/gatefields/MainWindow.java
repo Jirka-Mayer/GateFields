@@ -5,16 +5,32 @@ import cs.jirkamayer.gatefields.math.Vector2D;
 import cs.jirkamayer.gatefields.scheme.*;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 class MainWindow extends JFrame {
 
+    public static final int TARGET_FPS = 30;
+    public static final long TARGET_FRAME_DURATION_MS = (long)(1000.0 / TARGET_FPS);
+    private static final int MINIMAL_DELAY = 10;
+
     private SchemeView schemeView;
+    private SidePanel sidePanel;
 
     private Scheme scheme;
     private Selection selection;
 
     private Timer timer;
+    private long lastFrameStart = 0;
+    private long frame = 0;
+
+    /**
+     * Time that elapses in the simulation world during one frame
+     * at the TARGET_FPS. If FPS is lagging, then this is lagging as well.
+     */
+    public double simulationTimePerFrame = 1.0;
+
+    public boolean isSimulationRunning = false;
 
     MainWindow() {
         super("Gate fields");
@@ -26,28 +42,69 @@ class MainWindow extends JFrame {
 
         this.openDefaultScheme();
 
-        timer = new Timer((int)(1000.0 / 10.0), (ActionEvent e) -> {
-            scheme.getSimulator().simulationTick(0.1);
+        timer = new Timer(100, (ActionEvent e) -> {
+            long frameStart = System.currentTimeMillis();
+
+            scheme.getSimulator().simulationTick(simulationTimePerFrame);
             schemeView.draw();
 
+            long frameEnd = System.currentTimeMillis();
+
+            long waitFor = TARGET_FRAME_DURATION_MS - (frameEnd - frameStart);
+
+            if (waitFor < MINIMAL_DELAY)
+                waitFor = MINIMAL_DELAY;
+
+            if (frame % 10 == 0)
+                sidePanel.setFpsInfo((int)(1000.0 / (frameStart - lastFrameStart)), waitFor == MINIMAL_DELAY);
+
+            lastFrameStart = frameStart;
+            frame++;
+
+            if (!isSimulationRunning)
+                return;
+
+            timer.setInitialDelay((int)waitFor);
             timer.start();
         });
         timer.setRepeats(false);
+
+        this.startSimulation();
+    }
+
+    public void stopSimulation() {
+        if (!isSimulationRunning)
+            return;
+
+        timer.stop();
+        isSimulationRunning = false;
+    }
+
+    public void startSimulation() {
+        if (isSimulationRunning)
+            return;
+
+        timer.setInitialDelay(MINIMAL_DELAY);
         timer.start();
+        isSimulationRunning = true;
     }
 
     private void setupUI() {
         schemeView = new SchemeView(scheme, selection);
-        schemeView.setSize(1200, 700);
+        schemeView.setSize(1000, 700);
         this.add(schemeView);
 
         this.setJMenuBar(
             new MainMenu(
                 scheme,
                 schemeView.getActionController(),
-                schemeView.getCamera()
+                schemeView.getCamera(),
+                this
             )
         );
+
+        sidePanel = new SidePanel(this);
+        this.add(sidePanel, BorderLayout.EAST);
 
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.pack();
