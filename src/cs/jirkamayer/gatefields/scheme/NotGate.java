@@ -9,8 +9,8 @@ public class NotGate extends Element {
     public Vertex inputVertex, outputVertex;
 
     public NotGate() {
-        vertices.add(inputVertex = new Vertex(new Vector2D(-1, 0), this));
-        vertices.add(outputVertex = new Vertex(new Vector2D(2, 0), this));
+        vertices.add(inputVertex = new Vertex(new Vector2D(-0.5f, 0), this));
+        vertices.add(outputVertex = new Vertex(new Vector2D(1.5f, 0), this));
     }
 
     @Override
@@ -34,7 +34,7 @@ public class NotGate extends Element {
 
         // stem
         r.drawWire(
-            new Vector2D(-1, 0),
+            new Vector2D(-0.5f, 0),
             new Vector2D(0, 0),
             sim.hasSignal(inputVertex),
             selected
@@ -48,7 +48,7 @@ public class NotGate extends Element {
         // peak
         r.drawWire(
             new Vector2D(0.8f, 0),
-            new Vector2D(2, 0),
+            new Vector2D(1.5f, 0),
             sim.hasSignal(outputVertex),
             selected
         );

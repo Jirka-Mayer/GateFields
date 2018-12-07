@@ -66,6 +66,11 @@ public class MainMenu extends JMenuBar {
         andGate.setMnemonic('A');
         addMenu.add(andGate);
 
+        JMenuItem orGate = new JMenuItem("OR gate");
+        orGate.addActionListener((x) -> this.addGate(new OrGate()));
+        orGate.setMnemonic('O');
+        addMenu.add(orGate);
+
         this.add(addMenu);
     }
 
