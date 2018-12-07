@@ -61,6 +61,16 @@ public class SimulationQueue {
         }
     }
 
+    public void remove(Element e) {
+        Item item = itemForElement.get(e);
+
+        if (item == null)
+            return;
+
+        itemForElement.remove(e);
+        queue.remove(item);
+    }
+
     public boolean hasItemToExecute() {
         Item i = queue.peek();
 

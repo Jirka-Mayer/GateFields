@@ -166,6 +166,10 @@ public class Simulator {
         e.initializeSignals(this);
     }
 
+    public void elementRemoved(Element e) {
+        simulationQueue.remove(e);
+    }
+
     public void wireAdded(Wire w) {
         Component a = componentAtVertex.get(w.start);
         Component b = componentAtVertex.get(w.end);

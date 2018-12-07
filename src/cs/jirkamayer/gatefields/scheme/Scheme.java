@@ -108,6 +108,8 @@ public class Scheme {
             this.removeBoundVertex(v);
 
         elements.remove(e);
+
+        simulator.elementRemoved(e);
     }
 
     public Wire getWire(Vertex a, Vertex b) {
