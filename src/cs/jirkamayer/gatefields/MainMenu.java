@@ -81,6 +81,11 @@ public class MainMenu extends JMenuBar {
         nandGate.setMnemonic('D');
         addMenu.add(nandGate);
 
+        JMenuItem norGate = new JMenuItem("NOR gate");
+        norGate.addActionListener((x) -> this.addGate(new NorGate()));
+        norGate.setMnemonic('R');
+        addMenu.add(norGate);
+
         this.add(addMenu);
     }
 
