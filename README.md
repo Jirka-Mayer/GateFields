@@ -6,74 +6,78 @@ Editor a simulátor logických obvodů.
 > Zápočtový program pro Javu - ZS 2018, Jiří Mayer
 
 
-## Abstraktní zadání
+## Dokumentace
 
-- editace shématu `Scheme`
-    - logické prvky `Element`
-        - základní hradla (NOT, AND, OR, XOR, NAND)
-        - větší prvky kvůli efektivitě simulace / návrhu (RS-LATCH, ...)
-        - IO prvky (logical input, diode)
-    - spoje `Wire`
-        - mohou vést i do "nikam", nebo se větvit
-        - počítat s rozšiřitelností (bus, jako skupina spojů)
-- simulace
-    - diskrétní simulace se zpožděním jednotlivých hradel a spojů
-    - možnost pozastavit, upravit rychlost běhu
-    - lze editovat schéma během běžící simulace
+Aplikace je editor a simulátor logických obvodů. Obvody se skládají z elemntárních
+prvků `Element`, které jsou propojeny pomocí spojů `Wire`. Spoje vedou vždy mezi dvěma
+vrcholy `Vertex`. Vrcholy volně v prostoru jsou označované jako volné `freeVertex`.
+Vrcholy náležící k vývodu prvku jsou označované jako vázané `boundVertex`. Schéma obvodu
+obsahující všechny prvky reprezentuje třída `Scheme`.
 
 
-# Konkrétní implementace editoru
+### Editor
 
-> **Operace, které potřebuju podporovat**
-> - pohyb kamery
-> - přidávání prvků
-> - přidávání spojů
-> - udělat výber prvků a spojů
-> - pohyb a rotace výběru (diskrétní - 4x)
-> - rozpojení spoje od prvku
-> - spojení a rozpojení spojů v prostoru mimo prvek
-> - více spojů, které se schází na vývodu prvku
+Editor je založený na konceptu akcí `Action`. Interakcí s oknem editoru `SchemeView`
+vznikají události `Event`, které se předávají třídě `ActionController`. Ten v
+sobě drží seznam akcí. Každá akce poslouchá svoji spouštěcí událost. V případě shody
+se stane akce aktivní a přebere kontrolu nad editorem. Jsou do ní přesměrovány
+všechny události a může editovat schéma obvodu `Scheme`.
 
-- vrchol `Vertex`
-    - je konec spoje nebo konec vývodu nějakého prvku
-    - pokud se tři spoje sbíhají v jednom místě, toto místo je reprezentováno vertexem
-    - vertex označující vývod prvku je svázaný s pozicí prvku
-    - spoj vyberu výběrem obou jeho krajních vrcholů
-    - prvek vyberu výběrem alespoň jednoho z jeho vývodových vrcholů
-    - nikdy nebudu mít volný vrchol bez spoje nebo prvku - ty musím automaticky mazat
-    - nikdy nebudu mít dva vrcholy na jednom místě přes sebe - ty automaticky sloučím
-- vytvoření prvku
-    - někde z menu vyberu prvek, ten se mi přilepí ke kurzoru a čeká se buď na cancel nebo na jeho položení
-- vytvoření spoje
-    - buď vyberu vrchol vývodu nějakého prvku a "vytáhnu" z něj spoj (klávesa E = extrude)
-    - nebo vyberu dva libovolné vrcholy a spjojím je (klávesa M = merge)
-- odstranění prvku
-    - prvek odstraním jeho výběrem a stiskem klávesy X
-    - po prvku zůstanou viset spoje v prostoru
-    - (vymaže všechny označené prvky, i spoje mezi označenými prvky)
-- odstranění spoje
-    - vyberu krajní vrcholy spoje a stisknu Shift + X
-    - (vymaže všechny spoje, které jsou označené)
-    
-> Návrh editoru je hodně inspirovaný aplikací Blender
+Některé akce se samy ukončí v okamžiku spuštění. Mezi takové patří například výběr
+prvků nebo jejich mazání. Jiné akce jsou aktivní po delší dobu. Například posun
+vybraných prvků. Takové akce jdou většinou potvrdit stiskem enteru, nebo zrušit
+pomocí escape. Název aktivní akce se zobrazuje v levém dolním rohu editoru.
+
+Kamerou lze pohybovat táhnutím se stiskem levého tlačítka a zoom se dělá kolečkem myši.
+
+Důležitou částí editoru je výběr objektů. Vybírat lze pouze vrcholy a to pravým
+tlačítkem myši. Spoj se stane vybraným, pokud se vyberou oba jeho krajní vrcholy.
+Element se stane vybraným, pokud je vybrán alespoň jeden z jeho výstupních vrcholů.
+
+Seznam akcí a jejich spouštěcí událost / klávesa:
+
+| Událost | Akce                                               |
+| ------- | -------------------------------------------------- |
+| `LMB`   | Pohyb kamery.                                      |
+| `WHL`   | Zoom.                                              |
+| `RMB`   | Výběr vertexů. `shift` - rozšíření výběru.         |
+| `G`     | Posun vybraných prvků. `shift` - spojitý režim.    |
+| `R`     | Rotace výběru. `shift` - spojitý režim.            |
+| `X`     | Smazání vybraných prvků.                           |
+| `W`     | Přidání nebo odebrání spoje mezi dvěma vrcholy.    |
+| `E`     | Vytažení spoje z vrcholu (extrude).                |
+| `alt+A` | Přidání prvku do schématu (otevře menu).           |
+| `T`     | Překlopí stav vstupního prvku (+myš přes něho).    |
+
+Schémata jdou ukládat a načítat do souborů pomocí zkratek `ctrl+S` a `ctrl+O`.
+
+Schéma lze vyčistit a vytvořit nové zkratkou `ctrl+N`.
 
 
-# Konkrétní implementace simulátoru
+### Simulátor
 
-- je součástí editoru, dostane pouze ovládací panel
-- dikrétní simulace s prioritní frontou
-    - ve frontě jsou události
-    - když se událost zpracuje, může do fronty zařadit nové události
-    - priorita ve frontě odpovídá času konání události
-    - z fronty se každý simulační frame odebere tolik událostí, kolik se za ten frame mělo stát
-        - každý frame má nějaký reálný čas (může plavat)
-        - a také simulační čas (odsud se bere počet zpracovaných událostí)
-            - poměr reálného a simulačního času se nastavuje v ovládacím panelu jako rychlost simulace
-        - pokud simulace nestíhá, zpomalí se reálný framerate (frame skipping)
-            - prostě dokud se neodsimuluje současný frame, tak se další nespustí
-                - simlučaní čas se tím jakoby pozastaví
-                - indikuje se v ovládacím panelu
-- ovládací panel
-    - rychlost simulace
-    - indikátor frame skippingu
-    - pozastavení simulace
+Schéma se simuluje během jeho editace. Simulace je tak interaktivní.
+Pro ovládání simulátoru existuje pravý postranní panel. Na něm je posuvník nastavující
+rychlost simulace a tlačítko pro pozastavení simulace.
+
+Hlavní způsob jak interagovat s obvodem během simulace je pomocí vstupních prvků,
+jejichž hodnota lze přepínat klávesou `T` (kurzor musí být přes prvek a focus musí
+mít komponenta `SchemeView`).
+
+Signál se šíří skrz spoje nekonečně rychle. Simulátor `Simulator` si udržuje seznam
+komponent (vrcholy spojené spoji) a navíc o každém vrcholu ví, zda je aktivní.
+Aktivní vrcholy `activeVertex` se chovají jako zdroje signálu a obsahuje-li komponenta
+alespoň jeden aktivní vrchol, tak celá komponenta má signál. V případě změny aktivity
+vrcholů nebo změně struktury komponent se všechny prvky, kterých se změna dotkla strčí
+do fronty pro přepočítání.
+
+Každý prvek se v okamžiku jeho přepočítání podívá na svoje vstupní a výstupní vrcholy
+a podle toho které mají signál některé jiné vrcholy aktivuje nebo deaktivuje. Tím se vzruch
+šíří skrz schéma.
+
+Každý prvek má nějaké zpoždění, což je čas mezi vyrušením a okamžikem
+přepočítání aktivity výstupních vrcholů.
+
+Simulace probíhá v krocích. Každý krok odpovídá nějakému uplynulému času a v každém
+kroku se provede přepočítání všech prvků, které v tomto uplynulém čase měly
+být přepočítány.
